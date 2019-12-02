@@ -1,7 +1,16 @@
+@[TOC]
+# node
+## 一、导入导出
+### 1、常用导入导出
+### 2、导入导出缓存问题
+### 3、运行机制
+## 二、核心模块
+### 1、path
+
 # node
 ## 一、导入导出
 
-### 1、常用导入导出
+
     require(...) // 返回 ｛｝
 
     module.exports = {}
@@ -540,7 +549,9 @@ newListener/removeListener
       }
     }).listen(8080, '127.0.0.1');
 
-  ajax
+### 8、ajax
+  概要
+
     Asynchronous javascript and XML(AJAX)
     JS执行异步网络请求
 
@@ -550,7 +561,25 @@ newListener/removeListener
 
     myRequest.open(method, url, async?, user?, password); // 初始化一个请求
     
+  send()
+
+    send异步请求，发送后立即返回状态，同步请求，直到响应才返回。
+    GET或者HEAD，请求主题为null。
+
+    发送主体信息类型：
+    XMLHttpRequest.send();
+    XMLHttpRequest.send(ArrayBuffer data);
+    XMLHttpRequest.send(ArrayBufferView data);
+    XMLHttpRequest.send(Blob data);//上传文件必备
+    XMLHttpRequest.send(Document data);
+    XMLHttpRequest.send(DOMString? data);
+    XMLHttpRequest.send(FormData data);
+
+  setRequestHeader() 
+
+    如果没有使用setRequestHeader()方法设置Accept关部信息，则会发送“*、*”
     
+    是设置HTTP请求头部的方法。此方法必须在  open() 方法和 send()   之间调用。如果多次对同一个请求头赋值，只会生成一个合并了多个值的请求头。
 
 
 
