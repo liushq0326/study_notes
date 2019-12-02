@@ -463,9 +463,94 @@ writeFile(file, data[, option], callback)
       console.log("file write complete");
     })
 
+### 7、events模块
+    回调函数模式让 Node 可以处理异步操作。但是，为了适应回调函数，异步操作只能有两个状态：开始和结束。对于那些多状态的异步操作（状态1，状态2，状态3，……），回调函数就会无法处理，你不得不将异步操作拆开，分成多个阶段。每个阶段结束时，调用下一个回调函数。
+    为了解决这个问题，Node 提供 Event Emitter 接口。通过事件，解决多状态异步操作的响应问题。
 
+myEmit.on()/myEmit.emit()
 
+    同步的emit触发后,就会立刻调用on(),然后再继续顺序执行
+    var Events = require('events');
+    let myEmit = new Events();
+    myEmi.on('event', ()=>{
+        console.log('监听事件');
+    });
 
+    myEmit.emit('event');
+
+myEmit.once()
+
+    类似on(), 但只执行一次
+
+myEmit.removeListener()
+
+    用于解绑监听函数
+    参数1：监听事件名
+    参数2：监听回调函数
+    相当于把相应的事件名和回调解绑。
+
+myEmit.setMaxListeners(number)
+
+    设置一个事件最多绑定多个回调，默认绑定10个回调
+
+myEmit.removeAllListeners();
+
+    参数1：事件名（可选）
+    如果带参数表示移除当前事件的所有回调，如果不带参数，则表示移除所有事件的所有回调。
+
+myEmit.listeners()
+
+    参数1：事件名
+    返回当前事件绑定的所有回调函数组成的数组。
+
+try{}catch(err){}
+
+    可捕获同一个事件绑定的不同回调错误
+
+newListener/removeListener
+
+    Events模块自带事件，监听newListener，添加新的回调时触发。监听removeListener移除回调时触发。
+    myEmit.on('newListener', function(evtName){
+      console.log("New Listener:"+evtName);
+    })
+
+    myEmit.on('removeListener', function(evtName){
+      console.log("New Listener:"+evtName);
+    })
+
+### 7、http模块
+
+    const http = require("http")
+
+    http.STATUS_CODES: 是一个状态码解析对象
+
+    http.METHODS: 支持的请求方法数组
+
+    http.createServer(function(request, response){
+      if(request.url==="/"){
+        fs.readFile(`${__dirname}/src/index.html`,function(err, data){
+            response.writeHead(200, {'Content-Type': 'text/html'});
+            response.end(data);
+        })
+      } else {
+          fs.readFile(`${__dirname}/src/images/me.jpg`,function(err, data){
+              response.writeHead(200, {'Content-Type': 'image/jpeg'});
+              response.end(data);
+          })
+      }
+    }).listen(8080, '127.0.0.1');
+
+  ajax
+    Asynchronous javascript and XML(AJAX)
+    JS执行异步网络请求
+
+    ajax的实现目的是为了能够做到局部更新网页的数据，从而避免高频次的网页整体更新
+
+    var myRequest = new XMLHttpRequest();
+
+    myRequest.open(method, url, async?, user?, password); // 初始化一个请求
+    
+    
 
 
 
