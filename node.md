@@ -1,4 +1,5 @@
 @[TOC]
+
 # node
 ## 一、导入导出
 ### 1、常用导入导出
@@ -9,7 +10,6 @@
 
 # node
 ## 一、导入导出
-
 
     require(...) // 返回 ｛｝
 
@@ -581,31 +581,119 @@ newListener/removeListener
     
     是设置HTTP请求头部的方法。此方法必须在  open() 方法和 send()   之间调用。如果多次对同一个请求头赋值，只会生成一个合并了多个值的请求头。
 
+    var myRequest = new XMLHttpRequest();
+    myRequest.setRequestHeader("Accept", "application/json");
+    myRequest.send();
 
+  onreadystatechange和readyState
 
+    readyState返回XMLHttpRequest代理当前所处的状态。
 
+  | 值 | 状态    |  描述  |
+  | ---| -----:  | :----: |
+  | 0  | UNSENT      |代理被创建，未调用open()|
+  | 1  | OPENED      |open()方法已经被调用|
+  | 2  | HEADERS_RECEIVED|send()已被调用，并且头部状态已经可获得|
+  | 3  | LOADING      |下载中;responseText属性已经包含总数数据   |
+  | 4  | DONE      |下载完成    |
 
-  
+    var myRequest = new XMLHttpRequest();
+    myRequest.open("GET", "./data", true);
+    myRequest.setRequestHeader("Accept", "application/json");
+    myRequest.onreadystatechange = function(){
+      if(myRequest.readyState === 4){
+        if(myRequest.status === 200){
+          console.log("请求成功");
+          console.log(myRequest.responseText);
+        } else {
+          console.log(myRequest.status);
+        }
+      } else{
+        // 未请求完成
+      }
+    }
+    myRequest.send();
 
-  
+  XMLHttpRequest.response
 
+    返回一个 ArrayBuffer、Blob、Document，或 DOMString，具体是哪种类型取决于 XMLHttpRequest.responseType 的值。其中包含整个响应体（response body）。
+  XMLHttpRequest.responseText
 
+    返回一个 DOMString，该 DOMString 包含对请求的响应，如果请求未成功或尚未发送，则返回 null。
 
+  XMLHttpRequest.status:
 
+    返回了XMLHttpRequest 响应报名的数字状态码
 
+  XMLHttpRequest.responseType
 
+    一个用于定义响应类型的枚举值（enumerated value）。
+  XMLHttpRequest.responseURL 只读
 
-    
+    返回响应的序列化（serialized）URL，如果该 URL 为空，则返回空字符串。
+  XMLHttpRequest.responseXML 只读
 
+    返回一个 Document，其中包含该请求的响应，如果请求未成功、尚未发送或时不能被解析为 XML 或 HTML，则返回 null。
 
-  
+  XMLHttpRequest.statusText 只读
 
+    返回一个 DOMString，其中包含 HTTP 服务器返回的响应状态。与 XMLHTTPRequest.status 不同的是，它包含完整的响应状态文本（例如，"200 OK"）。
 
+  跨域请求
 
-    
+    1、简单请求：
+      简单请求包括GET、HEAD和POST（请求头Content-Type类型 仅限application/x-www-form-urlencoded、multipart/form-data和text/plain），并且不能出现任何自定义头（例如，X-Custom: 12345）
+      
+      后台设置响应头Access-Control-Allow-Origin为请求源地浏览器域地址。则简单请求下可以跨域。
 
+      Access-Control-Allow-Methods: 允许请求方法
+      备注：如果Access-Control-Allow-Origin允许指定跨域的话， Access-Control-Allow-Methods失效
+    2、jsonp:
 
+      利用script标签请求相应接口，并带上相应参数方法。后台接收请求后执行方法传入响应参数。
+    index.html
+      function getData(data){
+        console.log(data);
+      }
+      <script src="http://127.0.0.2:8080/image?func=getData"></script>
 
+    node服务器
+      var http = require("http");
+      var fs = require("fs");
+      var Url = require('url');
+
+      http.createServer(function(request, response){
+
+        let path = Url.parse(request.url);
+        let params = path.query.split('=');
+        let pathname = path.pathname;
+
+      
+        if(pathname==="/data"){
+          fs.readFile(`${__dirname}/src/index.txt`,function(err, data){
+              response.writeHead(200,  {'Content-Type': 'text/main', "Access-Control-Allow-Methods": 'GET'});
+              var script = `${params[1]}(${data.toString()})`;
+                response.write(script);
+              response.end();
+          }) // Access-Control-Allow-Methods
+        } else if(pathname==="/image"){
+            fs.readFile(`${__dirname}/src/images/me.jpg`,function(err, data){
+                console.log(response);
+                response.writeHead(200, {'Content-Type': 'image/jpeg',"Access-Control-Allow-Methods": 'GET'});
+                var script = params[1]+"("+data.toString()+")";
+                console.log(params);
+                response.write(script);
+                response.end();
+            })
+        } else if(pathname==="/json"){
+          fs.readFile(`${__dirname}/src/index.json`,function(err, data){
+              response.writeHead(200, {'Content-Type': 'application/json', "Access-Control-Allow-Methods": 'GET'});
+              var script = `${params[1]}(${data.toString()})`;
+              response.write(script);
+              response.end();
+          })
+      }
+      }).listen(8080, '127.0.0.2');
 
 
 
