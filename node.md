@@ -1088,16 +1088,54 @@ a.js
     ...
   }
   ```
+  >压缩（例如一个文件）通过zlib流将源数据流传输到目标中来完成
+  方法一：
+  ```js x
+  const zlib = require("zlib");
+  const gzip = zlib.createGzip();
+  const fs = require("fs");
+  const inp = fs.createReadStream('test.txt');
+  const out = fs.createWriteStream('testtxt.gz');
+  inp.pipe(gzip)
+    .on('error', ()=>{
+      console.log("数据发送至压缩包源数据错误");
+    })
+    .pipe(out)
+    .on('error', ()=>{
+      console.log("数据发送至压缩包源数据错误");
+    })
+  ```
+  方法二：
+  ```js
+  const zlib = require("zlib");
+  const fs = require('fs');
+  fs.createReadStream('test.txt')
+    .pipe(zlib.createGzip())
+    .pipe(fs.createWriteStream('text.zip'));
+  ````
+  >压缩和解压缩对象都是一个可读可写流
 
+  | 方法 | 说明   |
+  | ---  | :----: |
+  | zlib.createGzip | 返回Gzip流对象，使用Gzip算法对数据进行压缩处理 |
+  | zlib.createGunzip | 返回Gzip流对象，使用Gzip算法对压缩的数据进行解压缩处理 |
+  | zlib.createDeflate | 返回Deflate流对象，使用Deflate算法对数据进行压缩处理 |
+  | zlib.createInflate | 返回Deflate流对象，使用Deflate算法对数据进行解压缩处理 |
+  |zlib.createBrotliDecompress|返回Compress流对象，使用br算法对数据进行解压| 
+  |zlib.createBrotliCompress|返回Compress流对象，使用br算法对数据进行压缩| 
 
+  ```js
+  const zlib = require("zlib");
+  const fs = require('fs');
+  fs.createReadStream('test.zip')
+    .pipe(zlib.createGunzip())
+    .pipe(fs.createWriteStream('text.txt'));
+  ````
+* 压缩之http
 
-
-    br createBrotliDecompress createBrotliCompress
-  
-* Zlib压缩HTTP请求响应
   >zlib 模块可以用来实现对 HTTP 中定义的 gzip 和 deflate 内容编码机制的支持。
   * HTTP 的 Accept-Encoding 消息头用来标记客户端接受的压缩编码。
-  * Content-Encoding 消息头用于标识实际应用于消息的压缩编码
+  * Content-Encoding 消息头用于标识实际应用于消息的压缩编码。
   
   客户端
   ```js
@@ -1414,8 +1452,9 @@ a.js
 		});
   })
   ```
-正则表达式的学习地址: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions
-在线测试工具: https://tool.oschina.net/regex
+>正则表达式的学习地址: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions
+
+>在线测试工具: https://tool.oschina.net/regex
 
 
 
