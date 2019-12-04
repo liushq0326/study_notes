@@ -1,24 +1,25 @@
-@[TOC]
+[toc]
+# 一、导入导出
+## 1.1 常用导入导出
+## 1.2 导入导出缓存问题
+## 1.3 运行机制
+# 二、核心模块
+## 2.1 path
+## 2.2 url模块
+## 2.3 querySting模块
+## 2.4 os模块
+## 2.5 buffer模块
+## 2.6 fs模块
+## 2.7 events模块
+## 2.8 http模块
+## 2.9 ajax
+## 2.10 stream流
+## 2.11 Zlib模块
+## 2.12 Crypto模块
+## 2.13 爬虫技术1
 
-# node
-## 一、导入导出
-### 1、常用导入导出
-### 2、导入导出缓存问题
-### 3、运行机制
-## 二、核心模块
-### 1、path
-### 2、url模块
-### 3、querySting模块
-### 4、os模块
-### 5、buffer模块
-### 6、fs模块
-### 7、events模块
-### 8、http模块
-### 9、ajax
-
-# node
-## 一、导入导出
-
+# 一、导入导出
+## 1.1 常用导入导出
   ```js
   require(...) // 返回 ｛｝
 
@@ -30,7 +31,7 @@
 
   require() // 里如果只是个文件名，它会自动查询该文件中package.json文件里的main字段对应的文件目录，而如果没有package.json文件则会自动加载index.js或index.node文件
   ```
-### 2、导入导出缓存问题
+## 1.2 导入导出缓存问题
   ```js
   require('./src/math.js').msg = '1111';
   delete require.cache[require.resolve('./src/math.js')];
@@ -41,7 +42,7 @@
 
   console.log(require('./src/math.js').msg);
   ```
-### 3、运行机制
+## 1.3 运行机制
 
   >如果执行的是当前模块，那么require.main === module
 common.js运行机制，输入的是输出值的拷贝如：
@@ -97,9 +98,9 @@ a.js
     4. require.extensions: 根据文件的后缀名，调用不同的执行函数。
   ```
   
- ## 二、核心模块
+ # 二、核心模块
 
-### 1、path
+## 2.1 path
 
 * path.join()
     
@@ -164,7 +165,7 @@ a.js
 
     规范化给定的 path，解析 '..' 和 '.' 片段。当找到多个连续的路径段分隔字符时（\），则它们将被替换为单个平台特定的路径段分隔符（\）。 尾部的分隔符会保留。如果 path 是零长度的字符串，则返回 '.'，表示当前工作目录。
 
-### 2、url模块
+## 2.2 url模块
     
 * new URL(input[, base])
 
@@ -201,7 +202,7 @@ a.js
     8. search:获取及设置 URL 的序列化查询部分。
     9. searchParams:获取表示 URL 查询参数的 URLSearchParams 对象。 该属性是只读的。 使用 url.search 设置来替换 URL 的整个查询参数
 
-### 3、querySting模块
+## 2.3 querySting模块
 
   >let querystring = require("querystring");
   console.log(querystring);
@@ -239,7 +240,7 @@ a.js
     eq：键名与键值之间的分隔符，默认为=
     options：配置对象，它有两个属性，encodeURIComponent:在查询字符串中将 URL 不安全字符转换为百分比编码时使用的函数, 默认就是querystring.escape()
     ```
-### 4、os模块
+## 2.4 os模块
   
   >os模块提供与操作系统相关的方法
 
@@ -294,7 +295,7 @@ a.js
       release():返回一个操作系统的版本号
       cpus():返回一个逻辑CPU内核的信息
 
-### 5、buffer模块
+## 2.5 buffer模块
 
   >全局对象，是为处理二进制设计的（比如TCP数据流），它是一个构造函数，生成实例代表V8引擎分配的一段内存，是一个类似数组的对象，成员都为0-255的整数值，即一个8位字节
 
@@ -389,7 +390,7 @@ a.js
     
       Buffer对象所占内存的长度
 
-### 6、fs模块
+## 2.6 fs模块
 
   >fs是filesystem的缩写，该模块提供本地文件的读写能力，基本上是POSIX文件操作命令的简单包装。
 
@@ -633,7 +634,7 @@ a.js
     fs.createReadStream(src).pipe(fs.createWriteStream(target));
   }
   ```
-### 7、events模块
+## 2.7 events模块
   >回调函数模式让 Node 可以处理异步操作。但是，为了适应回调函数，异步操作只能有两个状态：开始和结束。
   
   >对于那些多状态的异步操作（状态1，状态2，状态3，……），回调函数就会无法处理，你不得不将异步操作拆开，分成多个阶段。每个阶段结束时，调用下一个回调函数。
@@ -697,7 +698,7 @@ a.js
         console.log("New Listener:"+evtName);
       })
     ```
-### 8、http模块
+## 2.8 http模块
   
 * createServer()
 
@@ -805,7 +806,7 @@ a.js
       keepAliveMsecs:一个整数，当使用KeepAlive的时候，设置多久发送一个TCP KeepAlive包，使得连接不要被关闭。默认等于1000，只有keepAlive设为true的时候，该设置才有意义。
 
 
-### 9、ajax
+## 2.9 ajax
   
 * 概要
 
@@ -959,7 +960,7 @@ a.js
         }).listen(8080, '127.0.0.2');
       ```
 
-### 10、stream流
+## 2.10 stream流
 
 * 在 Node.js 中有四种基本的流类型：Readable（可读流），Writable（可写流），Duplex（双向流），Transform（转换流）。
 
@@ -1040,7 +1041,8 @@ a.js
     调用pipe方法将数据送往一个可写数据流
 
   
-### 11、Zlib模块
+## 2.11 Zlib模块
+
   >zlib 模块提供通过 Gzip 和 Deflate/Inflate 实现的压缩功能，Brotli 也是如此。
 
   ```js
@@ -1088,8 +1090,332 @@ a.js
   ```
 
 
-### 12、Crypto模块
+
+
+    br createBrotliDecompress createBrotliCompress
+  
+* Zlib压缩HTTP请求响应
+  >zlib 模块可以用来实现对 HTTP 中定义的 gzip 和 deflate 内容编码机制的支持。
+  * HTTP 的 Accept-Encoding 消息头用来标记客户端接受的压缩编码。
+  * Content-Encoding 消息头用于标识实际应用于消息的压缩编码
+  
+  客户端
+  ```js
+  const zlib = require('zlib');
+  const http = require('http');
+  const fs = require('fs');
+  const request = http.get({
+    host: 'http://127.0.0.1/',
+    path: '/',
+    port: '8080',
+    headers: {'Accept-Encoding': 'gzip,deflate'}
+  })
+  request.on('response', (response)=>{
+    const output = fs.createWriteStream('example.com_index.html');
+    switch(response.headers['content-encoding']){
+      case 'br':
+        response.pipe(zlib.createBrotliDecompress()).pipe(output);
+        break;
+      case 'gzip':
+        response.pipe(zlib.createGunzip()).pipe(output);
+        break;
+      case 'deflate':
+        response.pipe(zlib.createInflate).pipe(output);
+        break;
+      default:
+        response.pipe(output);
+    }
+  });
+  ```
+  服务端
+  ```js
+  const zlib = require("zlib");
+  const http = require("http");
+  const fs = require("fs");
+  http.createServer((req, resp) => {
+    const raw = fs.createReadStream('lines.txt');
+
+    resp.setHeader('Vary: Accept-Encoding');
+    let acceptEncoding = request.headers['accept-encoding'];
+    if (!acceptEncoding) {
+        acceptEncoding = '';
+    }
+
+    if(/\bdeflate\b/.test(acceptEncoding)){
+      resp.writeHead(200, {'Content-Encoding': 'deflate'})
+      raw.pipe(zlib.createDeflate()).pipe(resp);
+    } else if(/\bgzip\b/.test(acceptEncoding)){
+      resp.writeHead(200, {'Content-Encoding': 'gzip'})
+      raw.pipe(zlib.createGzip()).pipe(resp);
+    } else if(/\bbr\b/.test(acceptEncoding)){
+      resp.writeHead(200, {'Content-Encoding': 'br'})
+      raw.pipe(zlib.createBrotliCompress()).pipe(resp);
+    } else {
+      resp.writeHead(200, {});
+      raw.pipe(resp);
+    }
+
+  }).listen(8080);
+  ```
+## 2.12 Crypto模块
+
+  >crypto 模块提供了加密功能，包括对 OpenSSL 的哈希、HMAC、加密、解密、签名、以及验证功能的一整套封装
+
+  ```js
+  const crypto = require('crypto');
+  console.log(crypto.getHashes())
+
+  [ 'RSA-MD4',
+  'RSA-MD5',
+  'RSA-MDC2',
+  'RSA-RIPEMD160',
+  'RSA-SHA1',
+  'RSA-SHA1-2',
+  'RSA-SHA224',
+  'RSA-SHA256',
+  'RSA-SHA384',
+  'RSA-SHA512',
+  'blake2b512',
+  'blake2s256',
+  'md4',
+  'md4WithRSAEncryption',
+  'md5',
+  'md5-sha1',
+  'md5WithRSAEncryption',
+  'mdc2',
+  'mdc2WithRSA',
+  'ripemd',
+  'ripemd160',
+  'ripemd160WithRSA',
+  'rmd160',
+  'sha1',
+  'sha1WithRSAEncryption',
+  'sha224',
+  'sha224WithRSAEncryption',
+  'sha256',
+  'sha256WithRSAEncryption',
+  'sha384',
+  'sha384WithRSAEncryption',
+  'sha512',
+  'sha512WithRSAEncryption',
+  'ssl3-md5',
+  'ssl3-sha1',
+  'whirlpool' ]
+  ```
+  >输出以等号分隔，分别是算法名、时间、密文。每一种算法所输出的密文长度和时间都是不一样的
+  有几个方法需要注意：
+  Update:添加数据
+  Digest:编码格式，一般以16进制为主
+  ```js
+  const crypto = require('crypto');
+  const fs = require("fs");
+
+  function hashAlgorithm(algorithm){
+    var s1 = new Date();
+    var filename = "lines.txt";
+    var txt = fs.ReadStream(filename);
+    var shasum = crypto.createHash(algorithm);
+    txt.on('data', function(d){
+      shasum.update(d);
+    })
+    txt.on('end', function(){
+      var d = shasum.digest('hex');
+      var s2 = new Date();
+      console.log(algorithm + ' = '+ (s2-s1)+'ms = '+ d)
+    })
+  }
+
+  function doHash(hashs){
+    hashs.forEach(name => {
+      hashAlgorithm(name);
+    });
+  }
+
+  var algs = crypto.getHashes();
+
+  doHash(algs);
+  ```
+>Crypto模块之加密和解密算法
+  ```js
+  const crypto = require('crypto'),
+        fs = require('fs'); // 引入基本模块
+  // 加密
+  /*
+    @parma 加密算法函数
+    @algorithm 算法类型
+    @key 密钥
+    @buf buffer数据
+    #cb 回调函数
+  */
+  function cipher(algorithm, key, buf, cb){
+		var encrypted = ""; // 加密通道
+		console.log(buf, 22222222222222222222222222222222);
+    var cip = crypto.createCipher(algorithm, key);//创建一个密码
+    encrypted += cip.update(buf, 'utf8', 'hex');//添加二进制的原始buffer转成16进制的值
+    encrypted += cip.final('hex'); //最后统一变成16进制
+    cb(encrypted);//把获取的最终密值输入回调
+  }
+  // 解密
+  /*
+    @parma 解密算法函数
+    @algorithm 算法类型
+    @key 密钥
+    @encrypted 已经加密后的数据
+    #cb 回调函数
+  */
+  function decipher(algorithm, key, encrypted, cb){
+		var decrypted = ""; 
+		
+    var decipher = crypto.createDecipher(algorithm, key);//创建解密通道
+    decrypted += decipher.update(encrypted, 'hex', 'utf8');//往解码通道中添加加密的数据
+		decrypted += decipher.final('utf8'); //解码通道最后输出二进制数据
+    cb(decrypted);//讲解码后的数据 传入进回调函数
+  }
+  /*
+    @parma 加密解密函数
+    @filename 源数据文件名称地址
+    @algorithm 加解密算法
+    @key 密钥
+  */
+  function cipherDecipherFile(filename, algorithm, key){
+    fs.readFile(filename, 'utf-8', function(err, data){
+      if(err) throw err;
+			var s1 = new Date();
+      cipher(algorithm, key, data, function(encrypted){
+				
+        var s2 = new Date();
+        console.log('cipher:' + algorithm + ',' + (s2-s1) + 'ms = ' + encrypted);
+        // 计算总加密时间
+        decipher(algorithm, key, encrypted, function(txt){
+					
+          var s3 = new Date();
+          console.log('decipher:'+algorithm+','+(s3-s2)+'ms = ' + txt);
+          //计算总解密时间
+        })
+      })
+    })
+  }
+
+  var algs = ['blowfish', 'aes-256-cbc', 'cast', 'des', 'des3', 'idea', 'rc2', 'rc4', 'seed'];
+  var key = 'abc';
+  var filename = "./lines.txt";
+  algs.forEach(function(name){
+    cipherDecipherFile(filename, name, key);
+  })
+  ```
+
+## 2.13 爬虫技术1
+
+* request
+  >request是一个函数，函数内部拥有很多的方法
+  npm  install request --save
+
+  ```js
+  const request = require("request");
+  console.log(request);
+
+  { [Function: request]
+  get: [Function],
+  head: [Function],
+  options: [Function],
+  post: [Function],
+  put: [Function],
+  patch: [Function],
+  del: [Function],
+  delete: [Function],
+  jar: [Function],
+  cookie: [Function],
+  defaults: [Function],
+  forever: [Function],
+  Request:
+  { 
+    [Function: Request]
+    super_:{ 
+      [Function: Stream]
+      super_: [Function],
+      Readable: [Function],
+      Writable: [Function],
+      Duplex: [Function],
+      Transform: [Function],
+      PassThrough: [Function],
+      pipeline: [Function: pipeline],
+      finished: [Function: eos],
+      Stream: [Circular],
+      _isUint8Array: [Function: isUint8Array],
+      _uint8ArrayToBuffer: [Function: _uint8ArrayToBuffer] 
+    },
+    debug: undefined,
+    defaultProxyHeaderWhiteList:
+    [ 
+      'accept',
+      'accept-charset',
+      'accept-encoding',
+      'accept-language',
+      'accept-ranges',
+      'cache-control',
+      'content-encoding',
+      'content-language',
+      'content-location',
+      'content-md5',
+      'content-range',
+      'content-type',
+      'connection',
+      'date',
+      'expect',
+      'max-forwards',
+      'pragma',
+      'referer',
+      'te',
+      'user-agent',
+      'via' 
+    ],
+    defaultProxyHeaderExclusiveList: [ 'proxy-authorization' ] },
+    initParams: [Function: initParams],
+    debug: [Getter/Setter] 
+  }
+  ```
+  >body内容就是响应主体部分，除了文本类的数据，其他基本都是乱码。
+
+  ```js
+  const request=require("request");
+  request({
+    // 基本请求基本信息
+    method: "GET",
+		url: "https://mtl.gzhuibei.com/images/img/2132/1.jpg",
+		headers:{
+			"user-Agent": "",
+			"Accept": "",
+		}
+  }, function(err, res, body){
+		// 请求的回调函数，
+		// err,错误信息
+		// res,响应信息
+		// body,返回的响应数据
+    console.log(res);
+  })
+  ```
+* JSDOM
+
+  https://github.com/jsdom/jsdom/wiki/jsdom-%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3
+
+  >使用 jsdom，主要用到jsdom主模块的一个命名导出的 jsdom 构造函数。往构造器传递一个字符串，将会得到一个 jsdom 构造实例对象，这个对象有很多实用的属性，特别是 window 对象:
+  ```js
+  const request=require("request");
+  const jsdom = require("jsdom");
+  const { JSDOM } = jsdom;
+  request({
+    // 基本请求基本信息
+    method: "GET",
+		url: "https://www.meitulu.com/item/2132.html",
+  }, function(err, res, body){
+		const dom = new JSDOM(body);
+		dom.window.document.querySelectorAll("center>img").forEach(function(item){
+			console.log(item.src);
+		});
+  })
+  ```
+正则表达式的学习地址: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions
+在线测试工具: https://tool.oschina.net/regex
 
 
 
-### 13、爬虫技术1
