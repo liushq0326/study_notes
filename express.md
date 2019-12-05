@@ -275,10 +275,119 @@
   });
   app.listen(3000);
   ```
-## 2.3-应用路由挂载
+  >单路径可以配置多个路由，多个路由会按照顺序执行。但是前一个路由必须加next()。必须是最后一个路由加send()。
+  ```js
+  var express = require('express');
+  var app = express();
+  let a = "";
+  app.get('/', function(req, res, next){
+    a += 'hello ';
+    next();
+  });
 
+  app.get('/', function(req, res){
+    a += 'world!';
+    res.send(a);
+  });
+  app.listen(3000);
+  ```
+## 2.3-应用路由挂载
+  >express可以新建多个实例, 每个实例都可以有自己完整的路由规则, 然后用过app.use的方式进行挂载
+
+  >如下代码所示:
+  * 1: 此时我们访问localhost:8080/admin和localhost:8080/manager都会返回login主页
+
+  * 2: 此时我们访问localhost:8080/admin/login和localhost:8080/manager/login都会返回login主页
+  ```js
+  var express = require("express");
+  let app = express();
+  app.listen(8000);
+  let admin = express();
+  admin.get("/", function(req, res){
+    console.log(admin.mountpath);
+    res.send("admin主页");
+  });
+  let login = express();
+  login.get("/", function(req, res){
+    console.log(login.mountpath);
+    res.send("login主页面");
+  })
+  admin.use("/log*n", login);
+  app.use(["/admin", "/manager"], admin);
+  ```
+* mount监听挂载事件
+  app.on('mount', callback(parent))
+  当子程序被挂载到父程序时，mount事件被发射。父程序对象作为参数，传递给回调方法。
+  这个触发的时间就是app.use调用了这个子应用的时间。
+  ```js
+  var express = require("express");
+  let app = express();
+  app.listen(8000);
+  let admin = express();
+  admin.on("mount", function(parent){
+    console.log('Admin Mounted');
+    res.send(parent);
+  });
+  admin.get("/", function(req, res){
+    console.log(login.mountpath);
+    res.send("login主页面");
+  })
+  console.log("这个会先执行");
+  admin.use("/admin", admin);
+  ```
 # 三、multer中间件
 ## 3.1-概念
+  >当客户端想要提交表单数据或是直接上传文件时, 就会采用post的请求方式,但是post提交的数据类型多, 格式复杂,因此我们就要引入几个中间件来辅助我们解析数据 
+  >Multer 会添加一个 body 对象 以及 file 或 files 对象 到 express 的 request 对象中。 body 对象包含表单的文本域信息，file 或 files 对象包含对象表单上传的文件信息。
+* upload.single()
+  >服务器
+  ```js
+  var express = require("express");
+  var multer = require('multer');
+  var path = require('path');
+  var app = express();
+  // 设置上传目录
+  var upload = multer({dest: path.join(__dirname, 'upload')});
+  // 监听请求的业务， 其中upload.single中的参数与表单元素中的input type=file的name属性一致
+  app.post('/singleUpload', upload.single('avatar'), function(res, next){
+    console.log(req.file);
+    console.log(req.body);
+    res.end("上传成功");
+  })
+  app.listen(8080);
+  ```
+  >页面
+  ```html
+  <form action="http://localhost:8080/singleUpload" method="post" enctype="multipart/form-data">
+    <input type="text" name="username">
+    <input type="text" name="pwd">
+    <input type="file" name='avatar' multiple="true">
+    <input type="submit" value="submit">
+  </form>
+  ```
+* upload.array()
+  >多文件上传1-单个多文件上传：
+  ```html
+  <input type="file" name='avatar' multiple="true">
+  ```
+  ```js
+  upload.array('avatar', 2)
+  console.log(req.files);
+  ```
+* upload.fields() 
+  >多文件上传2-多个多文件上传：
+   ```html
+  <input type="file" name='avatar1' multiple="true">
+  <input type="file" name='avatar2' multiple="true">
+  ```
+  ```js
+  upload.fields([{name: "avatar1", maxCount: 12}, {name: "avatar2", maxCount: 8}])
+  console.log(req.files);
+  ```
+* upload.none() 
+  只有文本域的表单
+  console.log(req.body);
+  
 ## 3.2-app.METHOD()
 ## 3.3-使用之文件存储
 ## 3.4-使用之API
