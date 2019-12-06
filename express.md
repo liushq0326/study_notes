@@ -11,10 +11,9 @@
 
 [三、multer中间件](#三multer中间件)
 - [3.1 概念](#31-概念)
-- [3.2 使用](#32-app.METHOD())
-- [3.3 使用之文件存储](#33-使用之文件存储)
-- [3.4 使用之API](#34-使用之API)
-- [3.5 使用之参数](#35-使用之参数)
+- [3.2 使用之文件存储](#32-使用之文件存储)
+- [3.3 使用之API](#33-使用之API)
+- [3.4 使用之参数](#34-使用之参数)
 
 
 # 一、Express的基本介绍
@@ -385,10 +384,41 @@
   console.log(req.files);
   ```
 * upload.none() 
-  只有文本域的表单
+  >只有文本域的表单时，请求参数
   console.log(req.body);
   
-## 3.2-app.METHOD()
-## 3.3-使用之文件存储
-## 3.4-使用之API
-## 3.5-使用之参数
+## 3.2-使用之文件存储
+* 概念
+  >磁盘存储引擎可以让你控制文件的存储。
+  >有两个选项可用，destination 和 filename。他们都是用来确定文件存储位置的函数。
+  * destination 是用来确定上传的文件应该存储在哪个文件夹中。也可以提供一个 string (例如 '/tmp/uploads')。如果没有设置 destination，则使用操作系统默认的临时文件夹。
+    >注意: 如果你提供的 destination 是一个函数，你需要负责创建文件夹。当提供一个字符串，multer 将确保这个文件夹是你创建的
+  * filename 用于确定文件夹中的文件名的确定。 如果没有设置 filename，每个文件将设置为一个随机文件名，并且是没有扩展名的。
+    >注意: Multer 不会为你添加任何扩展名，你的程序应该返回一个完整的文件名。
+  ```js
+  var storage = multer.diskStorage({
+    destination: function(req,file, cb){
+      switch(file.mimetype){
+        case "image/jpeg":
+          cb(null, path.join(__dirname, 'upload/images'));
+          break;
+        default:
+          cb(null, path.join(__dirname, 'upload'));
+          break;
+      }
+    },
+    filename: function(req, file, cb){
+
+    }
+  })
+  var uploads = multer({storage: storage});
+  var cpUpload = uploads.fields([{name: 'avatar1' maxCount: 12}, {name: 'avatar2', maxCount: 8}]);
+  app.post('/singleUpload', cpUpload, function(req, res, next){
+    console.log(req.files);
+    console.log(req.body);
+    res.end("上传成功");
+  });
+  ```
+
+## 3.3-使用之API
+## 3.4-使用之参数
