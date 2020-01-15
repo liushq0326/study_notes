@@ -198,7 +198,7 @@
   let app = express();//执行express 创建一个express应用
   app.listen(8080);//默认域名为localhost，
   app.get("/", (req, res)=>{
-    fs.readFile(`${__dirname}/index.html`, "utf8", function(){
+    fs.readFile(`${__dirname}/index.html`, "utf8", function(err){
       if(err) throw err;
       res.send(data);//发送灵气
     })
@@ -249,7 +249,7 @@
 ## 2.1-概念
   >application就是通过调用Express模块导出的顶层的express()方法来创建的一个值,该值一般用变量app表示
   >app是express功能的主要入口
-  >路由表示应用程序端点 (URI) 的定义以及端点响应客户机请求的方式。 
+  >路由表示应用程序端点 (URI) 的定义以及端口响应客户机请求的方式。 
   ```js
   var express = require('express');
   var app = express();
@@ -348,7 +348,7 @@
   // 设置上传目录
   var upload = multer({dest: path.join(__dirname, 'upload')});
   // 监听请求的业务， 其中upload.single中的参数与表单元素中的input type=file的name属性一致
-  app.post('/singleUpload', upload.single('avatar'), function(res, next){
+  app.post('/singleUpload', upload.single('avatar'), function(req, res, next){
     console.log(req.file);
     console.log(req.body);
     res.end("上传成功");
@@ -360,7 +360,7 @@
   <form action="http://localhost:8080/singleUpload" method="post" enctype="multipart/form-data">
     <input type="text" name="username">
     <input type="text" name="pwd">
-    <input type="file" name='avatar' multiple="true">
+    <input type="file" name='avatar'>
     <input type="submit" value="submit">
   </form>
   ```
@@ -385,7 +385,10 @@
   ```
 * upload.none() 
   >只有文本域的表单时，请求参数
+  ```js
+  upload = multer();
   console.log(req.body);
+  ```
   
 ## 3.2-使用之文件存储
 * 概念
@@ -408,7 +411,7 @@
       }
     },
     filename: function(req, file, cb){
-
+      cb(null, file.originalname);
     }
   })
   var uploads = multer({storage: storage});
