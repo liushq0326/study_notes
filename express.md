@@ -8,6 +8,9 @@
 - [2.1 概念](#21-概念)
 - [2.2 app.METHOD()](#22-app.METHOD())
 - [2.3 应用路由挂载](#23-应用路由挂载)
+- [2.4 app.route(path)](#24-app.route(path))
+- [2.5 application之配置响应头](#25-application之配置响应头)
+- [2.6 application之app.use()](#26-application之app.use())
 
 [三、multer中间件](#三multer中间件)
 - [3.1 概念](#31-概念)
@@ -408,10 +411,58 @@
   ```js
   对于一个相同的挂载路径，你可以挂载超过一个的中间件。
   var r1 = express.Router(); 
-  r1.get('/', function (req, res, next) { next(); }) var r2 = express.Router(); 
-  r2.get('/', function (req, res, next) { next(); }) app.use(r1, r2);
+  r1.get('/', function (req, res, next) { next(); }) 
+  var r2 = express.Router(); 
+  r2.get('/', function (req, res, next) { next(); }) 
+  app.use(r1, r2);
   ```
-
+* 一组中间件
+  ```js
+  const express=require("express");
+  var app = express();
+  let admin=express.Router();
+  admin.get("/admin", function(req, res, next){
+    res.send("hello admin");
+    next();
+  });
+  let login=express.Router();
+  admin.get("/login", function(req, res, next){
+    res.send("hello login");
+    next();
+  });
+  app.use("/user", [admin,login]);
+  app.listen(8080);
+  ```
+* 混合中间件
+  ```js
+  const express=require("express");
+  var app = express();
+  function mw1(req, res, next){
+    console.log("hello mw1");
+    next();
+  }
+  function mw2(req, res, next){
+    console.log("hello mw2");
+    next();
+  }
+  let r1=express.Router();
+  r1.get("/", function(req, res, next){
+    console.log("hello r1");
+    next();
+  });
+  let r2=express.Router();
+  r2.get("/", function(req, res, next){
+    console.log("hello r2");
+    next();
+  });
+  let subApp = express();
+  subApp.get("/", function(req, res, next){
+    res.send("hello subApp");
+    next();
+  });
+  app.use("/admin", mw1, [r1, mw2, r2], subApp);
+  app.listen(8080);
+  ```
 # 三、multer中间件
 ## 3.1-概念
   >当客户端想要提交表单数据或是直接上传文件时, 就会采用post的请求方式,但是post提交的数据类型多, 格式复杂,因此我们就要引入几个中间件来辅助我们解析数据 
