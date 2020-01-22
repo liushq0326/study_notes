@@ -18,7 +18,25 @@
 - [3.3 使用之API](#33-使用之API)
 - [3.4 使用之参数](#34-使用之参数)
 
-
+[四、request对象](#四request对象)
+- [4.1 概念](#41-概念)
+- [4.2 req.body](#42-req.body)
+- [4.3 req.cookie](#43-req.cookie)
+- [4.4 req.params](#44-req.params)
+- [4.5 req其他属性](#45-req其他属性)
+- [4.6 req-accepts(types)](#46-req-accepts(types))
+[五、Response对象](#四Response对象)
+- [5.1 概念](#51-概念)
+- [5.2 req.body](#52-req.body)
+- [5.3 req.cookie](#53-req.cookie)
+- [5.4 req.params](#54-req.params)
+- [5.5 req其他属性](#55-req其他属性)
+- [5.6 req-accepts(types)](#46-req-accepts(types))
+[六、ejs模板引擎](#四ejs模板引擎)
+- [6.1 概念](#61-概念)
+- [6.2 res.render()](#62-res.render())
+- [6.3 模板引擎的控制流程](#64-模板引擎的控制流程)
+- [6.4 include导入模块](#46-include导入模块)
 # 一、Express的基本介绍
 ## 1.1-基本介绍
   >Express.js或简称Express，是针对Node.js的web应用框架,主要是帮助我们简化各种web服务的实现方式
@@ -598,7 +616,7 @@
   * 默认情况下，Multer将重命名文件，以避免命名冲突。重命名功能可以根据您的需求进行定制。
 
   fileFilter
-  将此功能设置为控制应上载哪些文件和应跳过哪些文件的功能。
+  * 将此功能设置为控制应上载哪些文件和应跳过哪些文件的功能。
   ```js
   var uploads = multer(storage: storage, 
     function name(req, file, cb){
@@ -621,9 +639,7 @@
     cb(new Error('I don\'t have a clue!'));
   }
   ```
-## 3.4-使用之参数
-
-limits一个对象，指定以下可选属性的大小限制
+* limits一个对象，指定以下可选属性的大小限制
 
   | 键               | 描述    |
   | --------         | -----:  |
@@ -635,7 +651,438 @@ limits一个对象，指定以下可选属性的大小限制
   | parts     | 对于多部分表单，最大部分数（字段+文件）  |无限 |
   | headerPairs| 对于多部分形式，要解析的标头键=>值对的最大数量 |2000 |
 
-返回一个单例模式的路由的实例，之后你可以在其上施加各种HTTP动作的中间件。该方法可以用来避免同一个路径多个路由实例。
+* 返回一个单例模式的路由的实例，之后你可以在其上施加各种HTTP动作的中间件。该方法可以用来避免同一个路径多个路由实例。
 
+# 四、request对象
+## 4.1-概念
+* req对象代表了一个HTTP请求，其具有一些属性来保存请求中的一些数据，比如query string，parameters，body，HTTP headers等等。按照惯例，这个对象总是简称为req(http响应简称为res)，但是它们实际的名字由这个回调方法在那里使用时的参数决定。
 
+* req.baseUrl
+一个路由实例挂载的Url路径
 
+* 当一个请求路径是/greet/jp，baseUrl是/greet，当一个请求路径是/hello/jp，req.baseUrl是/hello。
+
+```js
+const  express = require("express");
+var app = express();
+var greet = express.Router();
+greet.get('/jp', function(req, res){
+  console.log(req.baseUrl);
+  res.send("Konichiwa!");
+});
+app.use('/greet', greet);
+app.listen(8080);
+```
+## 4.2-req.body
+  * 在请求的body中保存的是提交的一对对键值数据。默认情况下，它是undefined，当你使用比如body-parser和multer这类解析body数据的中间件时，它是填充的。
+  
+  ```js
+  var multer = require("multer");
+  var path = require("path");
+  var bodyParser = require("body-parser");
+  var app = express();
+  // 设置上传配置信息
+  app.use(bodyParser.json()); // for parsing application/json
+  app.use(bodyParser.urlencoded({extended:true}));// for parsing
+  ```
+  * 建议所有的项目，都使用这个中间件，这样可以保证我们获得数据格式统一且清晰。
+## 4.3-req.cookie
+  * 当使用cookie-parser中间件的时候，这个属性是一个对象，其包含了请求发送过来的cookies。如果请求没有带cookies，那么其值为{}
+  ```js
+  var express = require('express')
+  var cookieParser = require('cookie-parser')
+  var app = express()
+  app.use(cookieParser());//使用方式与bodyparse类似
+  ```
+## 4.4-req.params
+  * 采用的以模板+数据然后返回特殊的值的方式来生成无数个子页面
+  >链接末尾单变量
+  ```js
+  var express = require('express')
+  var fs = require('fs')
+  var app = express()
+  app.get("/user/:id", function(re, res){
+    res.send(req.params); // {id: ""}
+  })
+  app.listen(8080);
+  ```
+  >链接中间单变量
+  ```js
+  var express = require('express')
+  var fs = require('fs')
+  var app = express()
+  app.get("/user/:id/article", function(re, res){
+    res.send(req.params); // {id: ""}
+  })
+  app.listen(8080);
+  ```
+  >单链接多变量
+  ```js
+  var express = require('express')
+  var fs = require('fs')
+  var app = express()
+  app.get("/user/:id/article/:name", function(re, res){
+    res.send(req.params); // {id: "", name: ""}
+  })
+  app.listen(8080);
+  ```
+  >app.param中间件
+  * app.param中间件可以监听某个特定ID被访问的情况,可以优先做好一些预处理或是做一些基本配置数据
+  ```js
+  var express = require('express')
+  var app = express()
+  app.param("id", function(req, res, next, id){
+    console.log("优先激活");
+    console.log("ID为："+id);
+    next();
+  })
+  app.param("name", function(req, res, next, name){
+    console.log("其次激活");
+    console.log("NAME为："+name);
+    next();
+  })
+  app.get("/user/:id/article/:name", function(req, res){
+    console.log("最后激活");
+    res.send(req.params); // {id: "", name: ""}
+  })
+  app.listen(8080);
+  ```
+## 4.5-req其他属性
+  http://example.com/user
+  >req.hostname
+  * 包含了源自HostHTTP头部的hostname // example.com
+  >req.path
+  * 包含请求URL的部分路径 // '/user'
+  >req.protocol
+  * 一般为http，当启用TLS加密，则为https。
+  >req.qurey
+  * ?后的参数对象
+  ```js
+  // GET /search?q=tobi+ferret
+  req.query.q  // 'tobi ferret'
+  // GET /shoes?order=desc&shoe[color]=blue&shoe[type]=converse
+  req.query.order // 'desc'
+  req.query.shoe.color // 'blue'
+  req.query.shoe.type // 'converse'
+  ```
+## 4.6-req-accepts(types)
+  * 基于请求的Accept HTTP头部，检查指定的内容类型是否被接受 。这个方法返回最佳匹配，如果没有一个匹配，那么其返回undefined(在这个case下，服务器端应该返回406和"Not Acceptable")。
+  * 这个可以用来所返回的数据类型的校验
+  ```js
+  // Accept: text/html
+  req.accepts('html'); // => "html"
+
+  // Accept: text/*, application/json
+  req.accepts('html') // => "html"
+  req.accepts('text/html') // => "text/html"
+  req.accepts(['json', 'text']) // => "json"
+  req.accepts('application/json') // => "application/json"
+  req.accepts('image/png'); // undefined
+  req.accepts('png'); // undefined
+
+  // Accept: text/*;q=.5, application/json
+  req.accepts(['html', 'json']); // "json"
+  ```
+  * accepts的衍生方法
+  ```js
+  req.acceptsCharsets(charset[, ...])
+  // 返回指定的字符集集合中第一个的配置的字符集，基于请求的Accept-CharsetHTTP头。如果指定的字符集没有匹配的，那么就返回false。
+  req.acceptsEncodings(encoding[, ...])
+  // 返回指定的编码集合中第一个的配置的编码，基于请求的Accept-EncodingHTTP头。如果指定的编码集没有匹配的，那么就返回false。
+  req.acceptsLanguages(lang [, ...])
+  // 返回指定的语言集合中第一个的配置的语言，基于请求的Accept-LanguageHTTP头。如果指定的语言集没有匹配的，那么就返回false。
+  ```
+  * get(field)获取头部内容
+  ```js
+  req.get('Content-type');
+  // => "text/plain"
+  req.get('content-type');
+  // => "text/plain"
+  req.get('Something');
+  // => "undefined"
+  ```
+# 三、multer中间件
+  ## 6.1 概念
+  * res对象代表了当一个HTTP请求到来时，Express程序返回的HTTP响应。
+  ```js
+  res.headerSent()
+  // 布尔类型的属性，指示这个响应是否已经发送HTTP头部。
+  app.get('/', function(req, res)){
+    console.log(res.headersSent); // false
+    res.send('OK'); // send之后就发送了头部
+    console.log(res.headersSent); // true
+  }
+  ```
+## 6.2 res.append()
+
+  * 在指定的field的HTTP头部追加特殊的值value。如果这个头部没有被设置，那么将用value新建这个头部。value可以是一个字符串或者数组。
+  ```js
+  const express = require("express");
+  var app = express();
+  app.get('/', function(req, res){
+    res.append('Set-Cookie', 'foo=bar;Path=/;HttpOnly');
+    res.append('Lind', ['<http://localhost>','<http://localhost:3000>']);
+    res.append('error', 'test');
+    res.append('error', 'demo');
+    res.send('你好万章');
+  })
+  ```
+  >注意：
+  * 1:多次调用append添加同一个样式,效果是多个同名域的值相同
+  * 2:在res.append()之后调用app.set()函数将重置前面设置的值
+
+ ## 6.3-res.attachment()
+
+  * 设置HTTP响应的Content-Disposition头内容为"attachment"。如果提供了filename，那么将通过res.type()获得扩展名来设置Content-Type，并且设置Content-Disposition内容为"filename="parameter。
+  ```js
+  res.attachment(); // Content-Disposition:attachment
+  res.attachment('path/to/logo.png');
+  // Content-Disposition: attachment; filename="logo.png"
+  // Content-Type: image/png
+  ```
+  ```js
+  const express =require("express");
+  const fs=require("fs");
+  var app = express();
+  app.get('/', function(req, res){
+    fs.readFile(`${__dirname}/src/images/1.jpg`, function(err,data){
+      res.attachment('1.jpg');
+      res.send(data);
+    })
+  })
+  app.listen(8080);
+  ```
+## 6.4-res.download()
+  >download(path, [,filename], [,fn])
+  * 传输path指定的文件作为一个附件。
+  * filename默认值为path。
+  * fn回调，当发生错误或传输完成时调用
+  * res.sendFile(path)用来传输文件,path与downLoad的第一个参数相同
+  ```js
+  const express =require("express");
+  var app = express();
+  app.get('/', function(req, res){
+    res.download(`${__dirname}/upload/1579144579152.xls`,'1.xls', function(err){
+      if(err){
+        throw err
+      } else {
+        res.sendFile(`${__dirname}/upload/1579144579152.xls`);
+      }
+    })
+  })
+  app.listen(8080);
+  ```
+  * res.sendFile(path [, options] [, fn(err)])
+
+  >传输path指定的文件。根据文件的扩展名设置Content-Type的HTTP头部。除非在options中有关于root的设置，path一定是关于文件的绝对路径
+  >option
+
+  | 键            | 描述        |  默认值| 可用版本|
+  | --------      | -----:      | -----:      | -----:     |
+  | maxAge        | 设置Cache-Control的max-age属性，格式为毫秒数，或者是ms format的一串字符串| 0 ||
+  | root          | 相对文件名的根目录 |||
+  | lastModified  | 设置Last-Modified头部为此文件在系统中的最后一次修改时间。设置false来禁用它 |Enable|4.9.0+|
+  | headers       | 一个对象，包含了文件所在的sever的HTTP头部。(不知道怎么翻译了) |||
+  | dotfiles      | 是否支持点开头文件名的选项。可选的值"allow","deny","ignore" |"ignore||
+  >fn
+  >当传输完成或者发生了什么错误，这个方法调用fn回调方法。如果这个回调参数指定了和一个错误发生，回调方法必须明确地通过结束请求-响应循环或者传递控制到下个路由来处理响应过程。
+
+ ## 4.5-res-cookie()
+
+  * res.cookie(name, value [,options])
+  >设置name和value的cookie，value参数可以是一串字符或者是转化为json字符串的对象。
+  ```js
+  res.cookie('name', 'bobi', {'domain': 'example.com', 'path':'/amdin', 'sesure':true});
+  res.cookie('remenberme', '1', {'expires': newDate(Date.now() + 90000), 'httpOnly':true});
+  ```
+  >options是一个对象，其可以有下列的属性。
+
+  | 属性           | 类型       |  描述|
+  | --------      | -----:      | -----:      |
+  | domain        | String| 设置cookie的域名。默认是你本app的域名 |
+  | expires       | Date |cookie的过期时间，GMT格式。如果没有指定或者设置为0，则产生新的cookie|
+  | httpOnly      | Boolean |这个cookie只能被web服务器获取的标示|
+  | maxAge        | String|是设置过去时间的方便选项，其为过期时间到当前时间的毫秒值|
+  | path          | String |cookie的路径。默认值是/|
+  | secure        | Boolean |标示这个cookie只用被HTTPS协议使用|
+  | signed        | Boolean |标示这个cookie只用被HTTPS协议使用|
+
+## 4.6-res-format()
+
+  * 根据请求的对象中AcceptHTTP头部指定的接受内容。它使用req.accepts()来选择一个句柄来为请求服务，这些句柄按质量值进行排序。如果这个头部没有指定，那么第一个方法默认被调用。当不匹配时，服务器将返回406"Not Acceptable"，或者调用default回调。
+  ```js
+  res.format({
+    'text/plain':function(){
+      res.send('hey');
+    },
+    'text/html':function(){
+      res.send('<p>hey</p>');
+    },
+    'application/json':function(){
+      res.send({message:'hey'});
+    },
+    'default':function(){
+      res.status(406).send('Not Acceptable');
+    },
+  });
+  ```
+  * 例子: 当请求的对象中Accept头部设置成"application/json"或者"*/json"(不过如果是*/*，然后这个回复就是"hey")
+  
+ ## 4.7-res-redirect()
+  * res.redirect([status,] path)
+  >重定向来源于指定path的URL，以及指定的HTTP status codestatus。如果你没有指定status，status code默认为"302 Found"。
+  ```js
+  var express = require('express')
+  var app = express()
+  app.get("/", function(req, res){
+    res.send('hello world'); 
+  })
+  app.get("/admin", function(req, res){
+    res.send('hello admin'); 
+  })
+  app.get("/login", function(req, res){
+    res.redirect("302", "/admin"); 
+  })
+  app.listen(8080);
+  ```
+  ```js
+  // 重定向也可以是完整的URL，来重定到不同的站点。
+  res.redirect("http://google.come");
+  // 重定向也可以相对于当前的URL。比如，来之于http://example.com/blog/admin/(注意结尾的/)，下面将重定向到http://example.com/blog/admin/post/new
+  res.redirect('post/new');
+  //如果来至于http://example.com/blog/admin（没有尾部/），重定向post/new，将重定向到http://example.com/blog/post/new。
+  res.redirect('post/new');
+  //如果来至于http://example.com/blog/admin（没有尾部/），重定向post/new，将重定向到http://example.com/blog/post/new。
+  res.redirect('..');
+  ```
+# 六、ejs模板引擎
+## 6.1 概念
+  * 一个网站提供的子网页的数量浩如烟海, 如果每次都是直接返回一个html文件的话,那么我们的服务器就得静态存储巨量的文件,这明显是不符合开发需求的, 因此,我们将数据与结构拆分, 通过模板引擎来实现网页的柔性开发
+
+## 6.2 res.render()
+  > res.render(view [, locals] [, callback])
+  * 渲染一个视图，然后将渲染得到的HTML文档发送给客户端。可选的参数为：
+    * view,模板引擎所在的路径(默认是在${_dirname}/views的里面, 然后我们只要写上该目录里面的文件名即可;如果需要自定义,那么就需要提供一个绝对路径
+    ```js
+    const express = require('express');
+    const app = express();
+    const ejs = require("ejs");
+    app.listen(8080);
+    app.set("view engine", "ejs");//加载模板引擎的中间件
+    app.get("/", function(req, res){
+      res.render(`${__dirname}/ejsViews/home.ejs`, funciton(err, html){
+        res.send(html);
+      })
+    })
+    ```
+    * locals，定义了视图本地参数属性的一个对象。(这是一个数据对象,里面存储的数据会传输给模板引擎的数据)
+    * 记住,这个数据对象类似于全局对象window,我们是直接用到里面的属性的
+    >demo.js
+    ```js
+    const express =require("express");
+    const fs = require("fs");
+    const ejs =  require("ejs");
+    const app = express();
+    app.set("view engine", "ejs"); // 加载模板引擎中间件
+    app.get("/:title", function(req, res){ // 返回一个ejs文件，这个文件会经过中间件解析后返回给前端
+      console.log(`${__dirname}/data/${req.params.title}.json`);
+      console.log(__dirname);
+      fs.readFile(`${__dirname}/data/${req.params.title}.json`, "utf-8", function(err, data){
+        console.log('data+++++++++++++'+data);
+        let poetry=JSON.parse(data);
+        let nowData={poetry:poetry};
+        if(err){
+          res.send(404);
+        }else{
+          // console.log(typeof JSON.parse(data));
+          res.render(`${__dirname}/ejsViews/home.ejs`, nowData,
+          function(err, html){
+            res.send(html);
+          })
+        }
+      })
+    });
+    app.listen(8080);
+    ```
+    >ejsViews/home.ejs
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Document</title>
+    </head>
+    <body>
+      <h1>
+        <%=poetry.title%>
+      </h1>
+      <h2>
+        <%=poetry.author%>
+      </h2>
+      <p>
+        <%=poetry.content%>
+      </p>
+    </body>
+    </html>
+    ```
+    >data/xiakexing.json
+    ```json
+    {
+      "title": "侠客行",
+      "author": "李白",
+      "content": "赵客缦胡缨，吴钩霜雪明。"
+    }
+    ```
+
+## 6.3 模板引擎的控制流程
+  ><% '脚本' 标签，用于流程控制，无输出。
+  >每一行的代码的开始都是 <%, 每一行代码的结束必须是%>, 无论这一行代码有没有写完
+  * for循环遍历
+  ```html
+  <body>
+    <% for(var i=0; i< data.strArr.length; i++>) { %>
+      <p><%= data.strArr[i].content %></p>
+    <% } %>
+  </body>
+  ```
+  * if语句
+  <body>
+    <% if(user) { %>
+      <h2><%= user.name%></h2>
+    <% } %>
+  </body>
+## 6.4 include导入模块
+
+  ```js
+  const express = require('express');
+  const app = express();
+  const ejs = require("ejs");
+  app.listen(8080);
+  app.set("view engine", "ejs");//加载模板引擎的中间件
+  app.get("/", function(req, res){
+    let data={
+      index: JSON.parse(fa.readFileSync(`$(__dirname)/name/index.json`, 'utf8')),
+      header: JSON.parse(fa.readFileSync(`$(__dirname)/name/header.json`, 'utf8')),
+      banner: JSON.parse(fa.readFileSync(`$(__dirname)/name/banner.json`, 'utf8')),
+    }
+    res.render(`${__dirname}/ejsViews/index.ejs`, data,funciton(err, html){
+      res.send(html);
+    })
+  })
+  ```
+  ```html
+    <body>
+      <h1>
+        <%=poetry.title%>
+      </h1>
+      <%- include('header.ejs', {header:header}); %>
+      <%- include('banner.ejs', {banner:banner}); %>
+    </body>
+    ```
+  ```json
+  data/banner.json
+  data/header.json
+  data/index.json
+  ```
