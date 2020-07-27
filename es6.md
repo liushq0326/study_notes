@@ -1,13 +1,33 @@
-# es6
-## 一、解构赋值
+[一、解构赋值](#一、解构赋值)
+- [1.1 数组的解构赋值](#11-数组的解构赋值)
+- [1.2 对像的解构赋值](#12-对像的解构赋值)
+- [1.3 字符串的解构赋值](#13-字符串的解构赋值)
+- [1.4 数值和布尔值的解构赋值](#14-数值和布尔值的解构赋值)
+- [1.5 函数参数的解构赋值](#15-函数参数的解构赋值)
+- [1.5 解构赋值注意点](#15-解构赋值注意点)
 
-### 1、数组的解构赋值
+[二、字符串&数字](#二、字符串)
+- [2.1 字符串模版扩展](#21-字符串模版扩展)
+- [2.2 字符串方法扩展](#22-字符串方法扩展)
+- [2.3 数字格式的方法拓展](#23-数字格式的方法拓展)
+
+[三、Generator&Promise](#三、Generator&Promise)
+- [3.1 Generator](#31-Generator)
+- [3.2 Promise](#32-Promise)
+
+[四、Proxy&Reflect](#四、Proxy&Reflect)
+- [4.1 Proxy](#41-Proxy)
+- [4.2 Reflect](#42-Reflect)
+# es6
+# 一、解构赋值
+
+## 1.1 数组的解构赋值
 解构赋值会判断值是否严格等于undefind，如果不严格等于则取该值
 数组对过顺序赋值
 
     let [x=1] = [null]; // x = null
 
-### 2、对像的解构赋值
+## 1.2 对像的解构赋值
 对像通过属性值辅助
 
     let {foo, bar} = {foo: 'aaa', bar: 'bbb'}
@@ -42,13 +62,13 @@
     let {0: first, [ arr.length-1 ]: last} = arr;
     first //1   last //3
 
-### 3、字符串的解构赋值
+## 1.3 字符串的解构赋值
 字符串的可以解构赋值，这是因为此时，字符串被转换成了一个类似数组的对象。类似数组的对像有一个length属性，因此可以对这个属性结构赋值
   
     const [a, b, c, d, e] = 'hello';
 
     let {length: len} = 'hello';
-### 4、数值和布尔值的解构赋值
+## 1.4 数值和布尔值的解构赋值
   不是对像或数组的，先转换成对像或数组。
 
   let [foo] = 1;   // 报错1不是一个iterable
@@ -56,7 +76,7 @@
   let {t} = true; // t = undefind
 
   undefind和null无法转为对像，所以解构赋值时会报错。
-### 5、函数参数的解构赋值
+## 1.5 函数参数的解构赋值
 
       function  add([x=0, y=0]){
         return x+y;
@@ -71,14 +91,14 @@
       move({}); // [undefind, undefind]
       move(); // [0,0]
 
-### 5、解构赋值注意点
-#### 圆括号的问题
+## 1.5 解构赋值注意点
+## 圆括号的问题
   ES6规定，只要可能导致到解构的歧义，就不得使用圆括号。
   建议只要有可能，就不要使用圆括号
 
  1、非模式可用用
 
- #### 解构赋值的常见应用场景
+ ## 解构赋值的常见应用场景
     变换变量
     let x = 1, y = 2;
     [x, y] = [y, x];
@@ -93,10 +113,10 @@
     function f({x, y, z}){...}
     f({z: 3, y: 2, x: 1});
 
-## 二、字符串
+# 二、字符串
   遍历：
   for(... of ...)
-### 1、字符串模版扩展
+## 2.1 字符串模版扩展
 
     写法：
     `人们都是${country}人`
@@ -108,8 +128,8 @@
     字符串为第一个参数被${}截取的数组，后面一次跟${}
     fn的argument为[[qweqwr, wefwef], name]
   
-### 2、字符串方法扩展
-#### .raw()
+## 2.2 字符串方法扩展
+### .raw()
     传入``返回字符串， 主要用途是为了编译带斜杠\，传入什么字符串返回什么字符串
     String.raw`d/dfa`;
     返回
@@ -121,25 +141,26 @@
     // 等同于
     String.raw({raw: ['t','e','s','t']},1,2,3);
 
-#### .includes()
+### .includes()
   返回布尔值，调用string是否存在参数
-#### .startsWith()
+###
+  .startsWith()
   返回布尔值，参数是否在调用者的头部
-#### .endsWidth()
+### .endsWidth()
   返回布尔值，参数是否在调用者的尾部
-#### .repeat()
+### .repeat()
   参数为数字，重复生成字符串
   参数<-1则报错，正数小数时则向下。
-#### .padStart() .padEnd()
+### .padStart() .padEnd()
   第一个参数是补全的参数，第二个参数添加的字母
     
     'x'.padStart(5, 'ab'); //'ababx'
     'x'.padEnd(5); // '    x'
     'xxx'.padStart(2, 'ab'); // 'xxx'
-#### .trimStart() .trimEnd()
+### .trimStart() .trimEnd()
   删空格，删前面，删后面
     
-# 三、数字格式的方法拓展
+# 2.3 数字格式的方法拓展
 
   判断数字是否有限，判断是否是数字
 
@@ -195,9 +216,9 @@
 
 
 
-
-Generator:
-
+# 三、Generator&Promise
+## 3.1 Generator:
+```js
   function* gen(x, y){
     const result = yield x+y
   }
@@ -205,8 +226,8 @@ Generator:
   const g = gen();
   g.next()
   g.next(2);  || g.throw(new Error('报错了')) || g.return(2);
-
-  
+```
+```js  
 yield* 表达示：
   function* foo(){
 	yield 'a';
@@ -217,18 +238,18 @@ function* bar(){
   yield* foo();
 	yield 'y'
 }
-
-
-
-Promise
+```
+## 3.2 Promise
+```js
   .all
   .then
   .catch
   .race
   .resolve
   .reject
-
-Proxy 
+```
+# 四、Proxy&Reflect
+## 4.1 Proxy:
   1、get\set
       const Person = {
           age: 18, name:'万章', sex:'男'
@@ -252,7 +273,7 @@ Proxy
 
     get经典链式调用
 
-      function pipe(value) {
+     function pipe(value) {
         var funcStach = [];
         var oproxy = new Proxy({},{
           get: function(pipObjct, fnName){
@@ -261,6 +282,15 @@ Proxy
                 return fn(val);
               }, value)
             }
+            funcStach.push(window[fnName])
+            return oproxy;
+          }      
+        })
+        return oproxy;
+      }  
+      var double = n => n * 2;
+      var pow = n => Math.pow(n, n);
+      var reverseInt = n=> n.toString().split("").reverse().join("") | 0;
       pipe(3).double.pow.reverseInt.get;  // 63
 
   Proxy支持拦截的操作，一共有13种：
@@ -339,7 +369,7 @@ Proxy
   Proxy
     Proxy里的this和target里的this是不一样的，而有些原生对象的内部属性，只有通过正确的this才能拿到如target.getDate.bind(target);
 
-
+##　4.2 Reflect
   Reflect的静态方法：
     13个静态方法：
     Reflect.get(target, name, receiver)
