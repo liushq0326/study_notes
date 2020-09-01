@@ -5,18 +5,18 @@
 - [1.4 skew倾斜变化](#14-skew倾斜变化)
 - [1.5 matrix矩阵](#14-matrix矩阵)
 
-[二、transition过度](#二transition过度)
+[二、transition过渡](#二transition过渡)
 - [2.1 transition概述](#21-transition概述)
 - [2.2 transition-property](#22-transition-property)
 - [2.3 transition-duration](#23-transition-duration)
 - [2.4 transition-timing-function](#transition-timing-function)
 - [2.5 transition-delay](#25-transition-delay)
 
-[三、animation](#三animation)
+[三、animation动画](#三animation动画)
 - [3.1 animation概述](#31-animation概述)
 - [3.2 keyframes](#32-keyframes)
 
-[四、flex](#三flex)
+[四、flex弹性布局](#四flex弹性布局)
 - [4.1 flex-direction](#41-flex-direction)
 - [4.2 flex-wrap](#42-flex-wrap)
 - [4.3 flex-flow](#43-flex-flow)
@@ -25,7 +25,7 @@
 - [4.6 align-content](#46-align-content)
 - [4.7 项目属性](#47-项目属性)
 
-[五、media](#三media)
+[五、media](#五media)
 - [5.1 media概述](#51-media概述)
 - [5.2 语法逻辑](#52-语法逻辑)
 - [5.3 媒体特性](#53-媒体特性)
@@ -35,6 +35,24 @@
   - [5.4.3 代码实例](#543-代码实例)
   - [5.4.4 rem适配](#544-rem适配)
 - [5.5 vue中rem](#55-vue中rem)
+
+[六、垂直水平居中](#六垂直水平居中)
+- [6.1 水平居中](#6.1-水平居中)
+- [6.2 垂直居中](#6.2-垂直居中)
+- [6.3 定位水平垂直居中](#6.3-定位水平垂直居中)
+- [6.4 使用flex](#6.4-使用flex)
+- [6.5 vertical-align基线](#6.5-vertical-align基线)
+
+[七、display:table](#七display:table)
+- [7.1 概述](#7.1-概述)
+- [7.2 模拟表格、平分宽度](#7.2-模拟表格、平分宽度)
+
+[八、grid布局](#八grid布局)
+- [8.1 概述](#8.1-概述)
+
+[九、float](#九float)
+
+
 # 一、transform转换
 ## 1.1 translate位移
 ```
@@ -108,7 +126,7 @@ transform:matrix(0.866,0.5,-0.5,0.866,0,0);
 ```
    transition-delay: 设置过度延迟时间
 ```
-# 三、animation
+# 三、animation动画
 
 ## 3.1 animation概述
 >> animation: name duration timing-function delay iteration-count direction fill-mode play-state;
@@ -144,7 +162,7 @@ transform:matrix(0.866,0.5,-0.5,0.866,0,0);
   css-styles	必需的。一个或多个合法的CSS样式属性
 ```
 
-# 四、flex
+# 四、flex弹性布局
 >>flex布局下float\clear\vertical-align将失效
 ## 4.1 flex-direction
 ```
@@ -163,8 +181,9 @@ transform:matrix(0.866,0.5,-0.5,0.866,0,0);
 ```
 ## 4.3 flex-flow
 ```
-  主轴方向和是否换行：
+  简写了flex-direction、flex-wrap：
     flex-flow：flex-direction flex-wrap
+    默认值：row nowrap。
 ```
 ## 4.4 jusify-content
 ```
@@ -200,8 +219,8 @@ transform:matrix(0.866,0.5,-0.5,0.866,0,0);
   order: 属性定义项目的排列顺序。数值越小，排列越靠前，默认为0。
   flex-grow：属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。
   flex-shrink：属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。
-  flex-basis：默认值为auto，即项目的本来大小。也可以为350px，表示固定主轴尺寸350px
-  flex：flex-grow flex-shrink flex-basis复合写法，默认值为0 1 auto;
+  flex-basis：默认值为auto，即项目的本来大小。也可以为350px，表示固定主轴尺寸350px，主轴为横向时代表宽度，主轴为纵向时代表高度。
+  flex：flex-grow flex-shrink flex-basis复合写法，默认值为0 1 auto;该属性有两个快捷值：auto (1 1 auto) 和 none (0 0 auto)。
   align-self：属性允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性。默认值为auto，表示继承父元素的align-items属性，如果没有父元素，则等同于stretch,可选值：auto | flex-start | flex-end | center | baseline | stretch;
 ```
 # 五、media
@@ -425,3 +444,190 @@ package.json
     }
   },
 ```
+# 六、垂直水平居中
+## 6.1 水平居中
+* 1、如果子元素是块级元素：子元素设置display:block/table;margin: 0 auto;
+* 2、如果子级元素是行内元素或者行内块元素，需要父级设置text-align:center;子级设置display: inline/inline-block;
+## 6.2 垂直居中
+* 1、如果父子元素不脱离标准流：父元素设置display:table-cell;vertical-align: middle;
+2和3一起，可以实现水平垂直居中
+## 6.3 定位水平垂直居中
+* 1、如果已知子元素大小，可以设置子元素top: 50%; left: 50%; margin-top和margin-left为负的子元素大小的一半
+* 2、如果未知子元素大小，可以设置子元素top: 50%; left: 50%; transform: translate(-50%,-50%)
+* 3、如果已知子元素大小，还可以使用top: 0; left: 0; right: 0; bottom: 0; margin: auto;来实现（4个方向的margin都是auto，这个方法margin与子元素大小没有关系）
+## 6.4 使用flex
+* 1、父元素display: flex;
+主轴居中布局，父元素要用justify-content: center;
+交叉轴居中布局： 父元素要用align-item: center;
+两个一起用，实现水平垂直居中布局。
+* 2、父元素display:flex，子元素margin:auto，实现水平垂直居中。
+## 6.4 vertical-align基线
+>不同元素的基线各不相同，一般我们将小写字母x当做的基线当做基础基线，去对比其他元素基线位置，x默认基准基线是在x字母正下方。
+```
+默认基线位置：
+  图片：最下方
+  输入框: 里面文字x的最下方
+  按钮: 里面文字x的最下方
+  标签有字：里面字x标签
+  标签没字：最下方
+  标签有字添加overflow的hidden、scroll、overlay、auto时：最下方。
+```
+* vertical-align设置%
+```
+当设置属性为"%"的时候，指的是当前行内元素的line-height属性值的占比，可以设置成正负值，行内元素基线相对父元素字体基线上下移动这个百分比的距离。
+```
+* vertical-align设置middle
+```
+当设置属性为“middle”的时候，行内元素中间位置会和父元素字体基线上方1/2"x-height"位置对齐，“x-height”其实就是父元素中小写字母“x”的高度
+```
+* vertical-align其他属性值
+```
+baseline	默认。元素放置在父元素的基线上。
+sub	垂直对齐文本的下标。
+super	垂直对齐文本的上标
+top	把元素的顶端与行中最高元素的顶端对齐
+text-top	把元素的顶端与父元素字体的顶端对齐
+middle	把此元素放置在父元素的中部。
+bottom	把元素的顶端与行中最低的元素的顶端对齐。
+text-bottom	把元素的底端与父元素字体的底端对齐。
+length	 
+%	使用 "line-height" 属性的百分比值来排列此元素。允许使用负值。
+inherit	规定应该从父元素继承 vertical-align 属性的值。
+```
+# 七、display:table
+## 7.1 概述
+>支持IE8，目前，在大多数开发环境中，已经基本不用table元素来做网页布局了，取而代之的是div+css，那么为什么不用table系表格元素呢？
+
+1、用DIV+CSS编写出来的文件k数比用table写出来的要小，不信你在页面中放1000个table和1000个div比比看哪个文件大
+
+2、table必须在页面完全加载后才显示，没有加载完毕前，table为一片空白，也就是说，需要页面完毕才显示，而div是逐行显示，不需要页面完全加载完毕，就可以一边加载一边显示
+
+3、非表格内容用table来装，不符合标签语义化要求，不利于SEO
+
+4、table的嵌套性太多，用DIV代码会比较简洁
+```
+table
+使该元素按table样式渲染
+table-row
+使该元素按tr样式渲染
+table-cell
+使该元素按td样式渲染
+table-row-group
+使该元素按tbody样式渲染
+table-header-group
+使该元素按thead样式渲染
+table-footer-group
+使该元素按tfoot样式渲染
+table-caption
+使该元素按caption样式渲染
+table-column
+使该元素按col样式渲染
+table-column-group
+使该元素按colgroup样式渲染
+```
+表头1 | 表头2
+-----------| -----------
+table | (类似\<table>)此元素会作为块级表格来显示，表格前后带有换行符。
+inline-table | （类似 \<table>）此元素会作为内联表格来显示，表格前后没有换行符。
+table-row-group |	（类似 \<tbody>）此元素会作为一个或多个行的分组来显示。
+table-header-group |（类似 \<thead>）此元素会作为一个或多个行的分组来显示。
+table-footer-group  |	（类似 \<tfoot>）此元素会作为一个或多个行的分组来显示。
+table-row |	（类似 \<tr>）此元素会作为一个表格行显示。
+table-column-group |	（类似 \<colgroup>）此元素会作为一个或多个列的分组来显示。
+table-column	|（类似 \<col>）此元素会作为一个单元格列显示。
+table-cell	|（类似 \<td> 和 \<th>）此元素会作为一个表格单元格显示。
+table-caption	|（类似 \<caption>）此元素会作为一个表格标题显示。
+
+
+* border-collapse定义边框类型
+
+  collapse：共用框
+  separate：独立边框
+
+## 7.2 模拟表格、平分宽度
+```html
+<style type="text/css" rel="stylesheet">
+    .table {
+        display: table;
+        border: 1px solid #cccccc;
+        margin: 5px;
+        /*display: table时padding会失效*/
+    }
+    .row {
+        display: table-row;
+        border: 1px solid #cccccc;
+        /*display: table-row时margin、padding同时失效*/
+    }
+    .cell {
+        display: table-cell;
+        border: 1px solid #cccccc;
+        padding: 5px;
+        /*display: table-cell时margin会失效*/
+    }
+</style>
+<div class="table">
+    <div class="row">
+        <div class="cell">张三</div>
+        <div class="cell">李四</div>
+        <div class="cell">王五</div>
+    </div>
+    <div class="row">
+        <div class="cell">张三</div>
+        <div class="cell">李四</div>
+        <div class="cell">王五</div>
+    </div>
+</div>
+```
+## 7.3 注意事项
+>虽然display：table解决了避免使用表格的问题，但有几个需要注意的：
+
+* （1）display: table时padding会失效
+* （2）display: table-row时margin、padding同时失效
+* （3）display: table-cell时margin会失效
+# 八、grid
+## 8.1 概述
+>支持浏览器不太好，除了ie和flex支持到10，其他浏览器和flex相比差很远，暂时不总结了可以看[阮一峰总结的一网址](http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html)
+# 九、float
+## 9.1 概述
+>支持主流浏览器，下面是浮动经典案例文字环绕
+```html
+<style type="text/css">
+    .box {
+        width: 300px;
+        border: 1px solid black;
+        background-color: red;
+    }
+    .box img {
+        width: 150px;
+        float: left;
+    }
+</style>
+<div class="box">
+    <img class="img1" src="./images/1.jpg" alt="">
+    浮动布局解决的经典案例，浮动布局解决的经典案例
+</div>
+```
+>浮动会脱离文档流，不过还会占有原来的位置，可以使文字环绕。
+## 9.2 缺点
+>如果父级不设置高度的话，会导致父级会导致高度塌陷，解决办法：
+```
+① 浮动的父级设置高度
+super {
+    height: npx;
+}
+② 浮动的父级设置overflow
+super {
+    overflow: hidden;
+}
+③ 浮动的父级兄弟设置clear
+brother {
+    clear: left | right | both;
+}
+④ 浮动的父级伪类清浮动
+super:after {
+    content: "";
+    display: block;
+    clear: left | right | both;
+}
+```
+
