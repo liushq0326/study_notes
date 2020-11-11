@@ -3,7 +3,7 @@
 - [1.2 类型 ](#12-类型 )
 - [1.2 interface ](#12-interface )
 - [1.3 public\protected\private和readonly](#13-public\protected\private和readonly)
-- [1.4 抽象类](#14-抽象类)
+- [1.4 泛型](#14-泛型)
 
 
 # 一、基础
