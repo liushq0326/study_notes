@@ -1,38 +1,4 @@
-[一、概念和创建](#一概念和创建)
-- [1.1 概述](#11-概述)
-- [1.2 创建](#12-创建)
-
-[二、生命周期](#二生命周期)
-- [2.1 旧的生命周期](#21-旧的生命周期)
-- [2.2 新增生命周期](#22-新增生命周期)
-- [2.3 父子孙组件执行顺序](#23-父子孙组件执行顺序)
-
-[三、Component和PureComponent](#三Component和PureComponent)
-- [3.1 介绍](#31-介绍)
-- [3.2 优缺点](#32-优缺点)
-
-[四、路由](#四路由)
-- [4.1 自定义跳转](#41-自定义跳转)
-- [4.2 基本配置](#42-基本配置)
-- [4.3 嵌套路由](#43-嵌套路由)
-- [4.4 重定向](#44-重定向)
-- [4.5 history](#45-history)
-
-[五、ReactHook](#五ReactHook)
-- [5.1 概念](#51-概念)
-- [5.2 userState](#52-userState)
-- [5.3 userContext](#53-userContext)
-- [5.4 userReducer](#54-userReducer)
-- [5.5 userEffect](#55-userEffect)
-- [5.6 创建自定义Hooks](#56-创建自定义Hooks)
-- [5.7 React-Router+Hooks](#57-React-Router+Hooks)
-
-[六、redux](#六redux)
-- [6.1 概念](#61-概念)
-- [6.2 基本配置](#62-基本配置)
-- [6.3 分模块配置](#63-分模块配置)
-- [6.4 中间件](#64-中间件)
-- [6.5 redux-saga](#65-redux-saga)
+[toc]
 
 # 一、概念和创建
 ## 1.1 概述
@@ -234,7 +200,7 @@ React.PureComponent 与 React.Component 几乎完全相同，但 React.PureCompo
 
 在PureComponent中，如果包含比较复杂的数据结构，可能会因深层的数据不一致而产生错误的否定判断，导致界面得不到更新。
 
->如果定义了 shouldComponentUpdate()，无论组件是否是 PureComponent，它都会执行shouldComponentUpdate结果来判断是否 update。如果组件未实现 shouldComponentUpdate() ，则会判断该组件是否是 PureComponent，如果是的话，会对新旧 props、state 进行 shallowEqual 比较，一旦新旧不一致，会触发 update。
+>如果定义了 shouldComponentUpdate()，无论组件是否是 PureComponent，它都会执行shouldComponentUpdate结果来判断是否 update。如果组件未实现 shouldComponent Update() ，则会判断该组件是否是 PureComponent，如果是的话，会对新旧 props、state 进行 shallowEqual 比较，一旦新旧不一致，会触发 update。
 
 ## 3.2 优缺点
 * PureComponent缺点
