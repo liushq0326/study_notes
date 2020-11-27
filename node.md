@@ -1094,7 +1094,7 @@ a.js
   fs.createReadStream('test.txt')
     .pipe(zlib.createGzip())
     .pipe(fs.createWriteStream('text.zip'));
-  ````
+  ```
   >压缩和解压缩对象都是一个可读可写流
 
   | 方法 | 说明   |
@@ -1112,7 +1112,7 @@ a.js
   fs.createReadStream('test.zip')
     .pipe(zlib.createGunzip())
     .pipe(fs.createWriteStream('text.txt'));
-  ````
+  ```
 * 压缩之http
 
   >zlib 模块可以用来实现对 HTTP 中定义的 gzip 和 deflate 内容编码机制的支持。
