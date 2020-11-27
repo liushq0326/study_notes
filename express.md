@@ -1,42 +1,4 @@
-[一、Express的基本介绍](#一Express的基本介绍)
-- [1.1 基本介绍](#11-基本介绍)
-- [1.2 基本服务搭建](#12-基本服务搭建)
-- [1.3 中间件app.use](#13-中间件app.use)
-- [1.4 express的分类](#14-express的分类)
-
-[二、Application](#二、Application)
-- [2.1 概念](#21-概念)
-- [2.2 app.METHOD()](#22-app.METHOD())
-- [2.3 应用路由挂载](#23-应用路由挂载)
-- [2.4 app.route(path)](#24-app.route(path))
-- [2.5 application之配置响应头](#25-application之配置响应头)
-- [2.6 application之app.use()](#26-application之app.use())
-
-[三、multer中间件](#三multer中间件)
-- [3.1 概念](#31-概念)
-- [3.2 使用之文件存储](#32-使用之文件存储)
-- [3.3 使用之API](#33-使用之API)
-- [3.4 使用之参数](#34-使用之参数)
-
-[四、request对象](#四request对象)
-- [4.1 概念](#41-概念)
-- [4.2 req.body](#42-req.body)
-- [4.3 req.cookie](#43-req.cookie)
-- [4.4 req.params](#44-req.params)
-- [4.5 req其他属性](#45-req其他属性)
-- [4.6 req-accepts(types)](#46-req-accepts(types))
-[五、Response对象](#四Response对象)
-- [5.1 概念](#51-概念)
-- [5.2 req.body](#52-req.body)
-- [5.3 req.cookie](#53-req.cookie)
-- [5.4 req.params](#54-req.params)
-- [5.5 req其他属性](#55-req其他属性)
-- [5.6 req-accepts(types)](#46-req-accepts(types))
-[六、ejs模板引擎](#四ejs模板引擎)
-- [6.1 概念](#61-概念)
-- [6.2 res.render()](#62-res.render())
-- [6.3 模板引擎的控制流程](#64-模板引擎的控制流程)
-- [6.4 include导入模块](#46-include导入模块)
+[toc]
 # 一、Express的基本介绍
 ## 1.1-基本介绍
   >Express.js或简称Express，是针对Node.js的web应用框架,主要是帮助我们简化各种web服务的实现方式

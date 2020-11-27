@@ -1,41 +1,4 @@
-[一、概念和创建](#一概念和创建)
-- [1.1 概述](#11-概述)
-- [1.2 创建](#12-创建)
-
-[二、生命周期](#二生命周期)
-- [2.1 旧的生命周期](#21-旧的生命周期)
-- [2.2 新增生命周期](#22-新增生命周期)
-- [2.3 父子孙组件执行顺序](#23-父子孙组件执行顺序)
-
-[三、Component和PureComponent](#三Component和PureComponent)
-- [3.1 介绍](#31-介绍)
-- [3.2 优缺点](#32-优缺点)
-
-[四、路由](#四路由)
-- [4.1 自定义跳转](#41-自定义跳转)
-- [4.2 基本配置](#42-基本配置)
-- [4.3 history](#43-history)
-
-[五、ReactHook](#五ReactHook)
-- [5.1 概念](#51-概念)
-- [5.2 userState](#52-userState)
-- [5.3 userContext()](#53-userContext())
-- [5.4 userReducer()](#54-userReducer())
-- [5.5 userEffect()](#55-userEffect())
-- [5.6 创建自定义Hooks](#56-创建自定义Hooks)
-- [5.7 React-Router+Hooks](#57-React-Router+Hooks)
-
-[六、路由](#六路由)
-- [6.1 自定义跳转](#61-自定义跳转)
-- [6.2 基本配置](#62-基本配置)
-- [6.3 history](#63-history)
-
-[七、redux](#七redux)
-- [7.1 概念](#71-概念)
-- [7.2 基本配置](#72-基本配置)
-- [7.3 分模块配置](#73-分模块配置)
-- [7.4 中间件](#74-中间件)
-- [7.5 redux-saga](#75-redux-saga)
+[toc]
 
 # 一、概念和创建
 ## 1.1 概述
@@ -237,7 +200,7 @@ React.PureComponent 与 React.Component 几乎完全相同，但 React.PureCompo
 
 在PureComponent中，如果包含比较复杂的数据结构，可能会因深层的数据不一致而产生错误的否定判断，导致界面得不到更新。
 
->如果定义了 shouldComponentUpdate()，无论组件是否是 PureComponent，它都会执行shouldComponentUpdate结果来判断是否 update。如果组件未实现 shouldComponentUpdate() ，则会判断该组件是否是 PureComponent，如果是的话，会对新旧 props、state 进行 shallowEqual 比较，一旦新旧不一致，会触发 update。
+>如果定义了 shouldComponentUpdate()，无论组件是否是 PureComponent，它都会执行shouldComponentUpdate结果来判断是否 update。如果组件未实现 shouldComponent Update() ，则会判断该组件是否是 PureComponent，如果是的话，会对新旧 props、state 进行 shallowEqual 比较，一旦新旧不一致，会触发 update。
 
 ## 3.2 优缺点
 * PureComponent缺点
@@ -397,7 +360,7 @@ export default router;
 >HashHistory，带#号适合初学者。
 
 # 五、ReactHook
-## 5.1概念
+## 5.1 概念
 + React Hooks 的设计目的，就是加强版函数组件，完全不使用"类"，就能写出一个全功能的组件。
 + React Hooks 的意思是，组件尽量写成纯函数，如果需要外部功能和副作用，就用钩子把外部代码"钩"进来。
 + 所有的钩子都是为函数引入外部功能，所以 React 约定，钩子一律使用use前缀命名，便于识别。你要使用 xxx 功能，钩子就命名为 usexxx。
@@ -408,7 +371,7 @@ export default router;
 * useReducer()
 * useEffect()
 
-## 5.2 userState()
+## 5.2 userState
 > useState()用于为函数组件引入状态（state）。纯函数不能有状态，所以把状态放在钩子里面。
 ```js
 import React, { useState } from "react";
@@ -421,7 +384,8 @@ export default function  Button()  {
   return  <button  onClick={handleClick}>{buttonText}</button>;
 }
 ```
-## 5.3 userContext()
+
+## 5.3 userContext
 > 如果需要在组件之间共享状态，可以使用useContext()。
 App
 ```html
@@ -460,7 +424,7 @@ const Messages = () => {
   )
 }
 ```
-## 5.4 userReducer()
+## 5.4 userReducer
 >Redux 的核心概念是，组件发出 action 与状态管理器通信。状态管理器收到 action 以后，使用 Reducer 函数算出新的状态，Reducer 函数的形式是(state, action) => newState。
 
 useReducers()钩子用来引入 Reducer 功能。
@@ -492,7 +456,7 @@ function App() {
   );
 }
 ```
-## 5.5 userEffect()
+## 5.5 userEffect
 >useEffect()用来引入具有副作用的操作，最常见的就是向服务器请求数据。以前，放在componentDidMount里面的代码，现在可以放在useEffect()。
 
 >useEffect()接受两个参数。第一个参数是一个函数，异步操作的代码放在里面。第二个参数是一个数组，用于给出 Effect 的依赖项，只要这个数组发生变化，useEffect()就会执行。第二个参数可以省略，这时每次组件渲染时，就会执行useEffect()。
@@ -677,12 +641,12 @@ function App() {
 ## 5.8 react-hooks-redux
 
 
-#  七、redux
-## 7.1 概念
+#  六、redux
+## 6.1 概念
 >在一个大型的应用程序中，应用的状态不仅包括从服务器获取的数据，还包括本地创建的数据，以及反应本地UI状态的数据，而Redux正是为解决这一复杂问题而存在的。
 
 >redux作为一种单向数据流的实现，配合react非常好用，尤其是在项目比较大，逻辑比较复杂的时候，单项数据流的思想能使数据的流向、变化都能得到清晰的控制，并且能很好的划分业务逻辑和视图逻辑。下图是redux的基本运作的流程。
-## 7.2 基本配置
+## 6.2 基本配置
 * index.js
 ```js
 import React from 'react';
@@ -797,7 +761,7 @@ import reducer from "./reducer2"
 const store = createStore(reducer2/*,applyMiddleware(thunk)*/)
 export default store
 ```
-## 7.3 分模块配置
+## 6.3 分模块配置
 >多个reducer合并,页面上取值时，state下是对应的命名空间。
 rootReducer
 ```js
@@ -810,7 +774,7 @@ const allReducers = {
 const rootReducers = combineReducers(allReducers);
 export default rootReducers
 ```
-## 7.4 中间件
+## 6.4 中间件
 >dispatch一个action之后，到达reducer之前，进行一些额外的操作，就需要用到middleware。你可以利用 Redux middleware 来进行日志记录、创建崩溃报告、调用异步接口或者路由等等。
 
 >换言之，中间件都是对store.dispatch()的增强
@@ -838,7 +802,7 @@ function createThunkMiddleware(extraArgument) {
  };
 } 
 ```
-## 7.5 redux-saga
+## 6.5 redux-saga
 >redux-saga中间件会把所有异步请求放到一个文件，集中管理，原理是，组件dispatch某个action时，会被redux-saga捕获，再执行相应的函数，函数中执行异步请求。
 >便于统一管理action的异步请求
 store.js

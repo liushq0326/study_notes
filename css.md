@@ -1,56 +1,4 @@
-[一、transform转换](#一transform转换)
-- [1.1 translate位移](#11-translate位移)
-- [1.2 rotate旋转变化](#12-rotate旋转变化)
-- [1.3 scale缩放变化](#13-scale缩放变化)
-- [1.4 skew倾斜变化](#14-skew倾斜变化)
-- [1.5 matrix矩阵](#14-matrix矩阵)
-
-[二、transition过渡](#二transition过渡)
-- [2.1 transition概述](#21-transition概述)
-- [2.2 transition-property](#22-transition-property)
-- [2.3 transition-duration](#23-transition-duration)
-- [2.4 transition-timing-function](#transition-timing-function)
-- [2.5 transition-delay](#25-transition-delay)
-
-[三、animation动画](#三animation动画)
-- [3.1 animation概述](#31-animation概述)
-- [3.2 keyframes](#32-keyframes)
-
-[四、flex弹性布局](#四flex弹性布局)
-- [4.1 flex-direction](#41-flex-direction)
-- [4.2 flex-wrap](#42-flex-wrap)
-- [4.3 flex-flow](#43-flex-flow)
-- [4.4 jusify-content](#44-jusify-content)
-- [4.5 align-items](#45-align-items)
-- [4.6 align-content](#46-align-content)
-- [4.7 项目属性](#47-项目属性)
-
-[五、media](#五media)
-- [5.1 media概述](#51-media概述)
-- [5.2 语法逻辑](#52-语法逻辑)
-- [5.3 媒体特性](#53-媒体特性)
-- [5.4 编写响应式页面](#54-编写响应式页面)
-  - [5.4.1 设置Meta标签](#541-设置Meta标签)
-  - [5.4.2 加载兼容文件js](#542-加载兼容文件js)
-  - [5.4.3 代码实例](#543-代码实例)
-  - [5.4.4 rem适配](#544-rem适配)
-- [5.5 vue中rem](#55-vue中rem)
-
-[六、垂直水平居中](#六垂直水平居中)
-- [6.1 水平居中](#6.1-水平居中)
-- [6.2 垂直居中](#6.2-垂直居中)
-- [6.3 定位水平垂直居中](#6.3-定位水平垂直居中)
-- [6.4 使用flex](#6.4-使用flex)
-- [6.5 vertical-align基线](#6.5-vertical-align基线)
-
-[七、display:table](#七display:table)
-- [7.1 概述](#7.1-概述)
-- [7.2 模拟表格、平分宽度](#7.2-模拟表格、平分宽度)
-
-[八、grid布局](#八grid布局)
-- [8.1 概述](#8.1-概述)
-
-[九、float](#九float)
+[toc]
 
 
 # 一、transform转换
@@ -417,11 +365,11 @@ module.exports = {
 
   npm  install postcss-px2rem-exclude --save
   最后是配置exclude选项，需要注意的是这个配置在vue.config.js中式不起作用的，如图。
-  ```
+```
 
   正确的配置位置是项目根目录下的postcss.config.js文件，如果你的项目没有生成这个独立文件，就需要在你的package.js里设置。
 postcss.config.js
-```
+```js
   module.exports = {
     plugins: {
       autoprefixer: {},
@@ -433,7 +381,7 @@ postcss.config.js
   };
 ```
 package.json
-```
+```json
   "postcss": {
     "plugins": {
       "autoprefixer": {},
@@ -444,7 +392,9 @@ package.json
     }
   },
 ```
+
 # 六、垂直水平居中
+
 ## 6.1 水平居中
 * 1、如果子元素是块级元素：子元素设置display:block/table;margin: 0 auto;
 * 2、如果子级元素是行内元素或者行内块元素，需要父级设置text-align:center;子级设置display: inline/inline-block;
@@ -630,4 +580,16 @@ super:after {
     clear: left | right | both;
 }
 ```
+# 十、流式布局
+>也叫百分比布局，是移动端开发中经常使用的布局方式之一。
 
+* 流式布局的特征：
+  * 宽度自适应，高度写死，并不是百分百还原设计图。
+  * 图标都是固定死大小的，包括字体等也是固定死的。并不是所有的东西都是自适应的。
+  * 一些大的图片，设置宽度为百分比自适应即可，随着屏幕大小进行变化,对于小图标或者文本等, 一般都是定死宽高大小。
+
+* 经典的流式布局结构:
+  * 左侧固定，右侧自适应
+  * 右侧固定，左侧自适应
+  * 两侧固定，中间自适应（圣杯布局，双飞翼布局）
+  * 等分布局
