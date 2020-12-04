@@ -1,4 +1,45 @@
-[toc]
+[一、Express的基本介绍](#一Express的基本介绍)
+- [1.1 基本介绍](#11-基本介绍)
+- [1.2 基本服务搭建](#12-基本服务搭建)
+- [1.3 中间件app.use](#13-中间件app.use)
+- [1.4 express的分类](#14-express的分类)
+
+[二、Application](#二、Application)
+- [2.1 概念](#21-概念)
+- [2.2 app.METHOD()](#22-app.METHOD())
+- [2.3 应用路由挂载](#23-应用路由挂载)
+- [2.4 app.route(path)](#24-app.route(path))
+- [2.5 application之配置响应头](#25-application之配置响应头)
+- [2.6 application之app.use()](#26-application之app.use())
+
+[三、multer中间件](#三multer中间件)
+- [3.1 概念](#31-概念)
+- [3.2 使用之文件存储](#32-使用之文件存储)
+- [3.3 使用之API](#33-使用之API)
+- [3.4 使用之参数](#34-使用之参数)
+
+[四、request对象](#四request对象)
+- [4.1 概念](#41-概念)
+- [4.2 req.body](#42-req.body)
+- [4.3 req.cookie](#43-req.cookie)
+- [4.4 req.params](#44-req.params)
+- [4.5 req其他属性](#45-req其他属性)
+- [4.6 req-accepts(types)](#46-req-accepts(types))
+
+[五、Response对象](#四Response对象)
+- [5.1 概念](#51-概念)
+- [5.2 req.body](#52-req.body)
+- [5.3 req.cookie](#53-req.cookie)
+- [5.4 req.params](#54-req.params)
+- [5.5 req其他属性](#55-req其他属性)
+- [5.6 req-accepts(types)](#46-req-accepts(types))
+
+[六、ejs模板引擎](#四ejs模板引擎)
+- [6.1 概念](#61-概念)
+- [6.2 res.render()](#62-res.render())
+- [6.3 模板引擎的控制流程](#64-模板引擎的控制流程)
+- [6.4 include导入模块](#46-include导入模块)
+
 # 一、Express的基本介绍
 ## 1.1-基本介绍
   >Express.js或简称Express，是针对Node.js的web应用框架,主要是帮助我们简化各种web服务的实现方式
@@ -763,7 +804,74 @@ app.listen(8080);
   req.get('Something');
   // => "undefined"
   ```
-# 三、multer中间件
+# 五、response
+>res对象代表了当一个HTTP请求到来时，Express程序返回的HTTP响应。
+
+* res.headersSent
+```js
+// 布尔类型的属性，指示这个响应是否已经发送HTTP头部。
+app.get('/', function(req, res){
+  console.log(res.headersSent); // false;
+  res.send('OK'); // send之后就发送了头部
+  console.log(res.headersSent); // true
+})
+```
+* append(field, value)
+>在指定的field的HTTP头部追加特殊的值value。如果这个头部没有被设置，那么将用value新建这个头部。value可以是一个字符串或者数组
+```js
+const express = require("express");
+var app = express();
+app.get('/', function(req, res){
+  res.append('Lind', ['<http://localhost>', '<http://localhost:3000>']);
+  res.append('Set-Cookie', 'foo=bar;Path=/;HttpOnly');
+  res.append('Warning', '199 Miscellaneous warning');
+  res.append('Warning', '123456789');
+  res.send('你好万章');
+})
+app.listen(8080);
+// 注意：
+// 1:多次调用append添加同一个样式,效果是多个同名域的值相同
+// 2:在res.append()之后调用app.set()函数将重置前面设置的值
+```
+* attachment([filename])
+>设置HTTP响应的Content-Disposition头内容为"attachment"。如果提供了filename，那么将通过res.type()获得扩展名来设置Content-Type，并且设置Content-Disposition内容为"filename="parameter。
+```js
+res.attachment();
+// Content-Disposition: attachment
+res.attachment('path/to/logo.png');
+// Content-Disposition：attachment; filename="logo.png"
+// Content-Type: image/png
+```
+>在常规的HTTP应答中，Content-Disposition 响应头指示回复的内容该以何种形式展示，是以内联的形式（即网页或者页面的一部分），还是以附件的形式下载并保存到本地。
+```js
+const express = require(express);
+const fs = require("fs");
+var app = express();
+app.get('/', function(req, res){
+  fs.readFile(`$(__dirname)/src/images/1.jpg`, function(err, data){
+    res.attachment('1.jpg');
+    res.send(data);
+  })
+})
+app.listen(8080);
+```
+* download(path, [,filename], [,fn])
+>传输path指定的文件作为一个附件。
+通常，浏览器提示用户下载。默认情况下，Content-Disposition头部"filename="的参数为path(通常会出现在浏览器的对话框中)。通过指定filename参数来覆盖默认值。
+>当一个错误发生时或者传输完成，这个方法将调用fn指定的回调方法。
+>这个方法使用res.sendFile()来传输文件。
+```js
+const express = require("express");
+const fs = require("fs");
+var app = express();
+app.get('/', function(){
+
+})
+```
+
+
+
+# 六、ejs模板引擎
   ## 6.1 概念
   * res对象代表了当一个HTTP请求到来时，Express程序返回的HTTP响应。
   ```js
@@ -917,6 +1025,7 @@ app.listen(8080);
   //如果来至于http://example.com/blog/admin（没有尾部/），重定向post/new，将重定向到http://example.com/blog/post/new。
   res.redirect('..');
   ```
+
 # 六、ejs模板引擎
 ## 6.1 概念
   * 一个网站提供的子网页的数量浩如烟海, 如果每次都是直接返回一个html文件的话,那么我们的服务器就得静态存储巨量的文件,这明显是不符合开发需求的, 因此,我们将数据与结构拆分, 通过模板引擎来实现网页的柔性开发

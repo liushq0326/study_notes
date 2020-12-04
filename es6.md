@@ -1,4 +1,25 @@
-[toc]
+[一、解构赋值](#一、解构赋值)
+- [1.1 数组的解构赋值](#11-数组的解构赋值)
+- [1.2 对像的解构赋值](#12-对像的解构赋值)
+- [1.3 字符串的解构赋值](#13-字符串的解构赋值)
+- [1.4 数值和布尔值的解构赋值](#14-数值和布尔值的解构赋值)
+- [1.5 函数参数的解构赋值](#15-函数参数的解构赋值)
+- [1.5 解构赋值注意点](#15-解构赋值注意点)
+
+[二、字符串&数字](#二、字符串)
+- [2.1 字符串模版扩展](#21-字符串模版扩展)
+- [2.2 字符串方法扩展](#22-字符串方法扩展)
+- [2.3 数字格式的方法拓展](#23-数字格式的方法拓展)
+
+[三、Generator&Promise](#三、Generator&Promise)
+- [3.1 Generator](#31-Generator)
+- [3.2 Promise](#32-Promise)
+
+[四、Proxy&Reflect](#四、Proxy&Reflect)
+- [4.1 Proxy](#41-Proxy)
+- [4.2 Reflect](#42-Reflect)
+
+
 # es6
 # 一、解构赋值
 
@@ -9,7 +30,7 @@
     let [x=1] = [null]; // x = null
 
 ## 1.2 对像的解构赋值
-对像通过属性值辅助
+对像通过属性值辅助 
 
     let {foo, bar} = {foo: 'aaa', bar: 'bbb'}
 
@@ -228,9 +249,11 @@ function* bar(){
   .resolve
   .reject
 ```
+
 # 四、Proxy&Reflect
-## 4.1 Proxy:
-  1、get\set
+## 4.1 Proxy
+* 1、get\set
+```js
       const Person = {
           age: 18, name:'万章', sex:'男'
       }
@@ -250,9 +273,9 @@ function* bar(){
         }
       });
       console.log(proxy.age);
-
-    get经典链式调用
-
+```
+* get经典链式调用
+```js
      function pipe(value) {
         var funcStach = [];
         var oproxy = new Proxy({},{
@@ -272,35 +295,35 @@ function* bar(){
       var pow = n => Math.pow(n, n);
       var reverseInt = n=> n.toString().split("").reverse().join("") | 0;
       pipe(3).double.pow.reverseInt.get;  // 63
-
-  Proxy支持拦截的操作，一共有13种：
+```
+>Proxy支持拦截的操作，一共有13种：
       
-  //1、get 在读取代理对象的某个属性时触发该操作，比如在执行 proxy.foo 时。
-
+* 1、get 在读取代理对象的某个属性时触发该操作，比如在执行 proxy.foo 时。
+```js
       get(target, propKey, receiver)：拦截对象属性的读取，比如proxy.foo和proxy['foo']。
-
-  //2、set 在给代理对象的某个属性赋值时触发该操作，比如在执行 proxy.foo = 1 时。
-
+```
+* 2、set 在给代理对象的某个属性赋值时触发该操作，比如在执行 proxy.foo = 1 时。
+```js
       set(target, propKey, value, receiver)：拦截对象属性的设置，比如proxy.foo = v或proxy['foo'] = v，返回一个布尔值。
-  
-  //3、 apply 在调用一个目标对象为函数的代理对象时触发该操作，比如在执行 proxy() 时。
-
+``` 
+* 3、 apply 在调用一个目标对象为函数的代理对象时触发该操作，比如在执行 proxy() 时。
+```js
       apply(arget, object, args)：拦截 Proxy 实例作为函数调用的操作，比如proxy(...args)、proxy.call(object, ...args)、proxy.apply(...)。
-
-  //4、has 在判断代理对象是否拥有某个属性时触发该操作，比如在执行 "foo" in proxy 时。
-
+```
+* 4、has 在判断代理对象是否拥有某个属性时触发该操作，比如在执行 "foo" in proxy 时。
+```js
       has(target, propKey)：拦截propKey in proxy的操作，返回一个布尔值。
-
-  //5、construct 在给一个目标对象为构造函数的代理对象构造实例时触发该操作，比如在执行new proxy() 时。
-  
+```
+* 5、construct 在给一个目标对象为构造函数的代理对象构造实例时触发该操作，比如在执行new proxy() 时。
+```js
       construct(target, args, newTarget)：拦截 Proxy 实例作为构造函数调用的操作，比如new proxy(...args)。   
-
-  //6、getOwnPropertyDescriptor 在获取代理对象某个属性的属性描述时触发该操作，比如在执行 Object.getOwnPropertyDescriptor(proxy, "foo") 
-  
+```
+* 6、getOwnPropertyDescriptor 在获取代理对象某个属性的属性描述时触发该操作，比如在执行 Object.getOwnPropertyDescriptor(proxy, "foo") 
+```js
       getOwnPropertyDescriptor(target, propKey)：拦截Object.getOwnPropertyDescriptor(proxy, propKey)，返回属性的描述对象。
-
-  //7、getPrototypeOf 在读取代理对象的原型时触发该操作，比如在执行 Object.getPrototypeOf(proxy) 时。
-      
+```
+* 7、getPrototypeOf 在读取代理对象的原型时触发该操作，比如在执行 Object.getPrototypeOf(proxy) 时。
+```js   
       getPrototypeOf(target)：拦截Object.getPrototypeOf(proxy)，返回一个对象。
       拦截：
       Object.prototype._proto_
@@ -308,33 +331,34 @@ function* bar(){
       Object.getPrototypeOf()
       Reflect.getPrototypeOf()
       instanceof
-  //8、 isExtensible 在判断一个代理对象是否是可扩展时触发该操作，比如在执行 Object.isExtensible(proxy) 时。
-      
+```
+* 8、 isExtensible 在判断一个代理对象是否是可扩展时触发该操作，比如在执行 Object.isExtensible(proxy) 时。
+```js      
       isExtensible(target)：拦截Object.isExtensible(proxy)，返回一个布尔值。
-  
-  //9、 ownKeys 在获取代理对象的所有属性键时触发该操作，比如在执行 Object.getOwnPropertyNames(proxy) 时。
-
+```  
+* 9、 ownKeys 在获取代理对象的所有属性键时触发该操作，比如在执行 Object.getOwnPropertyNames(proxy) 时。
+```js
       ownKeys(target)：拦截Object.getOwnPropertyNames(proxy)、Object.getOwnPropertySymbols(proxy)、Object.keys(proxy)、for...in循环，返回一个数组。该方法返回目标对象所有自身的属性的属性名，而Object.keys()的返回结果仅包括目标对象自身的可遍历属性。
-  
-  //10、preventExtensions 在让一个代理对象不可扩展时触发该操作，比如在执行 Object.preventExtensions(proxy) 
-  
+```  
+* 10、preventExtensions 在让一个代理对象不可扩展时触发该操作，比如在执行 Object.preventExtensions(proxy) 
+```js  
       preventExtensions(target)：拦截Object.preventExtensions(proxy)，返回一个布尔值。
-
-  //11、setPrototypeOf 在设置代理对象的原型时触发该操作，比如在执行 Object.setPrototypeOf(proxy, null) 时。
-
+```
+* 11、setPrototypeOf 在设置代理对象的原型时触发该操作，比如在执行 Object.setPrototypeOf(proxy, null) 时。
+```js
       setPrototypeOf(target, proto)：拦截Object.setPrototypeOf(proxy, proto)，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。
-
-  //12、defineProperty 在定义代理对象某个属性时的属性描述时触发该操作，比如在执行 Object.defineProperty(proxy, "foo", {}) 时。
-
+```
+* 12、defineProperty 在定义代理对象某个属性时的属性描述时触发该操作，比如在执行 Object.defineProperty(proxy, "foo", {}) 时。
+```js
       defineProperty(target, propKey, propDesc)：拦截Object.defineProperty(proxy, propKey, propDesc）、Object.defineProperties(proxy, propDescs)，返回一个布尔值。
-
-  //13、deleteProperty 在删除代理对象的某个属性时触发该操作，比如在执行 delete proxy.foo 时。
-       
+```
+* 13、deleteProperty 在删除代理对象的某个属性时触发该操作，比如在执行 delete proxy.foo 时。
+```js       
       deleteProperty(target, propKey)：拦截delete proxy[propKey]的操作，返回一个布尔值。
-
-  Proxy.revocable()方法
+```
+* Proxy.revocable()方法
     返回一个可取消Proxy实例
-
+```js
       let target = {};
       let handler = {};
       let {proxy, revoke} = Proxy.revocable(target, handler);
@@ -345,13 +369,17 @@ function* bar(){
       revoke();
       proxy.foo // TypeError: Revoked
       //执行完revoke, 代理proxy将不可访问了。
-
-  Proxy
+```
+* Proxy
+```
     Proxy里的this和target里的this是不一样的，而有些原生对象的内部属性，只有通过正确的this才能拿到如target.getDate.bind(target);
+```
 
-##　4.2 Reflect
+## 4.2 Reflect
+
   Reflect的静态方法：
     13个静态方法：
+  ```js
     Reflect.get(target, name, receiver)
       获取target的name属性，target对象的this指向receiver，如果没有receiver则this为target
       receiver为数据对象，target为方法对象
@@ -361,7 +389,7 @@ function* bar(){
 
     Reflect.set(target, name, value, receiver)
       有receiver则target对象的this指向receiver，如果没有receiver则this为target
-
+  ```
     
 
 
