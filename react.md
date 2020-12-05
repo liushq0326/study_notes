@@ -149,7 +149,8 @@ static getDerivedStateFromProps(nextProps, prevState)
 ```
 * getSnapshotBeforeUpdate(prevProps, prevState)
 >该方法的返回值，是componentDidUpdate的第三个参数。
-
+>在 React 开启异步渲染模式后，在执行函数时读到的 DOM 元素状态并不总是渲染时相同，这就导致在 componentDidUpdate 中使用 componentWillUpdate 中读取到的 DOM 元素状态是不安全的，因为这时的值很有可能已经失效了。
+>而getSnapshotBeforeUpdate 会在最终的 render 之前被调用，也就是说在 getSnapshotBeforeUpdate 中读取到的 DOM 元素状态是可以保证与componentDidUpdate 中一致的
 ```js
 // 代替componentWillUpdate。
 // 常见的 componentWillUpdate 的用例是在组件更新前，读取当前某个 DOM 元素的状态，并在 componentDidUpdate 中进行相应的处理。
