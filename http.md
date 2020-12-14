@@ -37,28 +37,78 @@ Content-length: 12984
 ```html
 <scheme>://<user>:<password>@<host>:<port>/<path>;<params>?<query>#<frag>
 ```
-  * 方案
-  * 用户
-  * 密码
-  * 主机
-  * 端口
-  * 路径
-  * 参数
-  * 查询
-  * 片段
+  * 方案：访问服务器以获取资源时要使用哪种协议
+  * 用户：某些方案访问资源时需要用户名
+  * 密码：用户名后面可能需要包含密码，用冒号分隔
+  * 主机：资源宿主服务器的主机名或点分IP地址
+  * 端口：资源宿主服务器正在监听的端口号，很多方案都有默认端口号（HTTP的默认端口号为80）
+  * 路径：服务器上资源的本地名，由一个斜杠将其与前面的URL组件分隔开来，路径组件的语法是与服务器和方案有关的
+  * 参数：某些方案会用这个组件来指定输入参数。参数为名/值对。URL中可以包含多个参数字段，它们相互之间以及与路径的其余部分之间用分号(;)分隔
+  * 查询：某些方案会用这个组件传递参数以激活应用程序（比如数据库、公告板、搜索引擎以及其他因特网网关）。查询组件的内容没有通用格式。用字符“?”将其与URL的其余部分分隔开来。
+  * 片段：一小片或一部分资源的名字。引用对象时，不会将frag字段传送给服务器，这个字段是在客户端内部使用的。通过字符“#”将其其与URL的其余部分分隔开来
 
 几乎没有哪个URL 中包含了所有这些组件(不同类型的URL包含了里面的几个不同的部分)
 URL 最重要的3 个部分是方案（scheme）、主机（host）和路径（path）
 
 * 方案
-  * file
-  * news
-  * telnet
-  * http
-  * https
-  * mailto
-  * ftp
-  * rtsp,rtspa
+  * file：方案file表示一台指定主机（通过本地磁盘，网络文件系统或其他一些文件共享系统）上可直接访问的文件。各字段都遵循用户格式。本地主机可以省略主机名。
+  ```html
+  基本格式：
+  file://<host>/<path>
+  示例：
+  file://OFFICE-FS/policies/c.doc
+  ```
+  * news：用户来访问一些特定的文章或新闻组。它有一个很独特的性质：news URL自身包含的信息不足以对资源进行定位。
+  ```html
+  其他格式： 
+    news:<newsgroup>
+    news:<news-article-id>
+  示例：
+    news:rec.arts.startrek
+  ```
+  * telnet：用户访问交互式业务。它表示的并不是对象自身，而是可通过telnet协议访问的交互式应用程序（资源）。
+  ```html
+  基本格式：
+  telnet://<user>:<pasworld>@<host>:<port>/
+  示例：
+  telnet://slurp:webhound@joes-hardware.com:23/
+  ```
+  * http：超文本传输协议方案，除了没有用户名和密码之外，与通用的URL格式相符。默认端口80
+  ```html
+  基本格式：
+  http://<host>:<port>/<path>?<query>#<frag>
+  示例：
+  http://www.joes-hardware.com:80/index.html
+  ```
+  * https:
+  方案https与方案http是一对。唯一的区别在于方案https使用了网景的SSL，SSL为HTTP连接提供了端到端的加密机制。其语法与HTTP的语法相同，默认端口为443
+  ```html
+  基本格式：
+  https://<host>:<port>/<path>?<query>#<frag>
+  示例：
+  https://www.joes-hardware.com:80/index.html
+  ```
+  * mailto：Mailto URL指向的是E-mail地址。由于En-mail的行为与其他方案都都有所不同（它并不指向任何可以直接访问的对象），所以mailto URL的格式与标准URL的格式也有所不同。
+  ```html
+  基本格式：
+  mailto:<RFC-822-addr-spec>
+  示例：
+  mailto:joe@joes-hardware.com
+  ```
+  * ftp：文件传输协议URL可以用来从FTP服务器上下载或身其上载文件，并获取FTP服务器上的目录结构内容的列表。在Web和URL出现之前FTP就已经存在了。Web应用程序将FTP作为一种数据访问方案使用。URL语法遵循下列通用格式。
+  ```html
+  基本格式：
+  ftp://<user>:<password>@<host>:<port>/<path>;<params>
+  示例：
+  ftp://anonymous:joe%40joes@prep.ai.mit.edu:21/pub/gnu/
+  ```
+  * rtsp,rtspu：RTSP URL是可以通过实时流传输协议（Real Time Streaming Protocol）解析的音/视频媒体资源的标识符。方案rtspu中的u表示UDP协议来获取资源的。
+  ```html
+  基本格式：
+  rtsp://<user>:<password>@<host>:<port>/<path>
+  示例：rtsp://www.joes-hardware.com:554/interview/cto_video
+  ```
+
 ## 二、HTTP请求的事务逻辑
 
 ### 2.1 概念
