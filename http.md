@@ -1,369 +1,182 @@
-# es6
-## 一、解构赋值
-
-### 1、数组的解构赋值
-解构赋值会判断值是否严格等于undefind，如果不严格等于则取该值
-数组对过顺序赋值
-
-    let [x=1] = [null]; // x = null
-
-### 2、对像的解构赋值
-对像通过属性值辅助
-
-    let {foo, bar} = {foo: 'aaa', bar: 'bbb'}
-
-等价于
-
-    let {foo：wz, bar: bar} = {foo: 'aaa', bar: 'bbb'}
-    //wz = 'aaa' bar='bbb'
-
-常用用法
-    
-    let {forEach} = Array.prototype;
-    forEack.call(this, function);
-
-    let obj = {
-      p:[
-        'hello',
-        {y: 'World'}
-      ]
-    }
-    let {p: [x, { y }]} = obj
-    let {p, p: [x, { y }]} = obj //第二个p为模式 p=["hello", {y: 'world'}]
-
-嵌套赋值
-    
-    ({foo:obj.prop, bar: arr[0]} = {foo:123, bar: true})
-    // 小括号表示不是块级作用域，而是一条操作语句
-
-数组对象结构赋值
-
-    let arr = [1, 2, 3];
-    let {0: first, [ arr.length-1 ]: last} = arr;
-    first //1   last //3
-
-### 3、字符串的解构赋值
-字符串的可以解构赋值，这是因为此时，字符串被转换成了一个类似数组的对象。类似数组的对像有一个length属性，因此可以对这个属性结构赋值
-  
-    const [a, b, c, d, e] = 'hello';
-
-    let {length: len} = 'hello';
-### 4、数值和布尔值的解构赋值
-  不是对像或数组的，先转换成对像或数组。
-
-  let [foo] = 1;   // 报错1不是一个iterable
-  let {toString: str} = 123; // str = toString(){}
-  let {t} = true; // t = undefind
-
-  undefind和null无法转为对像，所以解构赋值时会报错。
-### 5、函数参数的解构赋值
-
-      function  add([x=0, y=0]){
-        return x+y;
-      }
-      add([1, 2]);
-
-      function move({x, y} = {x:0, y:0}){
-        return [x, y]
-      }
-      move({x=1, x=2}); // [1, 2]
-      move({x=1}); // [1, undefind]
-      move({}); // [undefind, undefind]
-      move(); // [0,0]
-
-### 5、解构赋值注意点
-#### 圆括号的问题
-  ES6规定，只要可能导致到解构的歧义，就不得使用圆括号。
-  建议只要有可能，就不要使用圆括号
-
- 1、非模式可用用
-
- #### 解构赋值的常见应用场景
-    变换变量
-    let x = 1, y = 2;
-    [x, y] = [y, x];
-
-    从函数中返回多个值
-    function example(){
-      return [1, 2, 3]
-    }
-    let [a, b, c] = example()
-
-    函数参数的定义
-    function f({x, y, z}){...}
-    f({z: 3, y: 2, x: 1});
-
-## 二、字符串
-  遍历：
-  for(... of ...)
-### 1、字符串模版扩展
-
-    写法：
-    `人们都是${country}人`
-    `fwgwe${`sas${pro}dfsd`+`sgs${city}ag`}qgwg`
-
-    fn(s){console.log(s)}
-    fn`qweqwr${name}wefwef`
-    返回
-    字符串为第一个参数被${}截取的数组，后面一次跟${}
-    fn的argument为[[qweqwr, wefwef], name]
-  
-### 2、字符串方法扩展
-#### .raw()
-    传入``返回字符串， 主要用途是为了编译带斜杠\，传入什么字符串返回什么字符串
-    String.raw`d/dfa`;
-    返回
-    d/dfa
-
-    正常使用：
-    相当于模板字符串的倒推
-    String.raw({raw: test},1,2,3) // 't1e2s3t'
-    // 等同于
-    String.raw({raw: ['t','e','s','t']},1,2,3);
-
-#### .includes()
-  返回布尔值，调用string是否存在参数
-#### .startsWith()
-  返回布尔值，参数是否在调用者的头部
-#### .endsWidth()
-  返回布尔值，参数是否在调用者的尾部
-#### .repeat()
-  参数为数字，重复生成字符串
-  参数<-1则报错，正数小数时则向下。
-#### .padStart() .padEnd()
-  第一个参数是补全的参数，第二个参数添加的字母
-    
-    'x'.padStart(5, 'ab'); //'ababx'
-    'x'.padEnd(5); // '    x'
-    'xxx'.padStart(2, 'ab'); // 'xxx'
-#### .trimStart() .trimEnd()
-  删空格，删前面，删后面
-    
-# 三、数字格式的方法拓展
-
-  判断数字是否有限，判断是否是数字
-
-    Number.isFinite();
-
-    Number.isNaN();
-
-  判断一个数值是否为整数
-
-    Number.isInteger();
-    Number.isInteger(5.0); // true
-    5.0和5在计算机内部存储的值都是一样的
-
-  开方，返回一个数的多少次方
-
-    Math.pow(10, 10);
-    Math.pow(2, 53);  //是计算机存储的最大值
-    等于
-    Number.MAX_SAFE_INTEGER + 1
-
-  退1法
-
-  Math.trunc()
-    Math.trunc(-0.1); // 0
-    Math.floor(-0.1); // -1
-  
-  判断一个数是正数、负数还是0
-
-    Math.sign
-    参数为正数，返回+1
-    参数为负数，舞台-1
-    参数为0，返回为0
-    参数为-0，返回-0
-    其它值返回NaN
-
-  立方根
-  
-    Math.cbrt(x) //返回x立方根
-
-  平方根
-
-    如果是字符串将转换成数值，返回多个参数平方和的平方根
-    Math.hypot(x1,x2)；返回x1平方+x2平方的平方根
-
-  指数运算符**
-  
-    2**2**3 2的2次幂的结果的3次幂
-
-
-
-
-
-
-
-
-
-Generator:
-
-  function* gen(x, y){
-    const result = yield x+y
-  }
-
-  const g = gen();
-  g.next()
-  g.next(2);  || g.throw(new Error('报错了')) || g.return(2);
-
-  
-yield* 表达示：
-  function* foo(){
-	yield 'a';
-	yield 'b';
-}
-function* bar(){
-	yield "x"
-  yield* foo();
-	yield 'y'
-}
-
-
-
-Promise
-  .all
-  .then
-  .catch
-  .race
-  .resolve
-  .reject
-
-Proxy 
-  1、get\set
-      const Person = {
-          age: 18, name:'万章', sex:'男'
-      }
-
-      var proxy = new Proxy(Person, {
-        get: function(target, property, proxy){
-          if(property === 'age'){
-            console.log('你确定要知道我的年纪吗');
-            return `洒家今年${target[property]}岁了`;
-          }
-        };
-        set(target, property, value, proxy){
-          if(property === name){
-            console.log('你确定要知道朕的名字');
-            target[property] = value;
-          }
-        }
-      });
-      console.log(proxy.age);
-
-    get经典链式调用
-
-      function pipe(value) {
-        var funcStach = [];
-        var oproxy = new Proxy({},{
-          get: function(pipObjct, fnName){
-            if(fnName === 'get'){
-              return funcStach.reduce(function(val, fn){
-                return fn(val);
-              }, value)
-            }
-      pipe(3).double.pow.reverseInt.get;  // 63
-
-  Proxy支持拦截的操作，一共有13种：
-      
-  //1、get 在读取代理对象的某个属性时触发该操作，比如在执行 proxy.foo 时。
-
-      get(target, propKey, receiver)：拦截对象属性的读取，比如proxy.foo和proxy['foo']。
-
-  //2、set 在给代理对象的某个属性赋值时触发该操作，比如在执行 proxy.foo = 1 时。
-
-      set(target, propKey, value, receiver)：拦截对象属性的设置，比如proxy.foo = v或proxy['foo'] = v，返回一个布尔值。
-  
-  //3、 apply 在调用一个目标对象为函数的代理对象时触发该操作，比如在执行 proxy() 时。
-
-      apply(arget, object, args)：拦截 Proxy 实例作为函数调用的操作，比如proxy(...args)、proxy.call(object, ...args)、proxy.apply(...)。
-
-  //4、has 在判断代理对象是否拥有某个属性时触发该操作，比如在执行 "foo" in proxy 时。
-
-      has(target, propKey)：拦截propKey in proxy的操作，返回一个布尔值。
-
-  //5、construct 在给一个目标对象为构造函数的代理对象构造实例时触发该操作，比如在执行new proxy() 时。
-  
-      construct(target, args, newTarget)：拦截 Proxy 实例作为构造函数调用的操作，比如new proxy(...args)。   
-
-  //6、getOwnPropertyDescriptor 在获取代理对象某个属性的属性描述时触发该操作，比如在执行 Object.getOwnPropertyDescriptor(proxy, "foo") 
-  
-      getOwnPropertyDescriptor(target, propKey)：拦截Object.getOwnPropertyDescriptor(proxy, propKey)，返回属性的描述对象。
-
-  //7、getPrototypeOf 在读取代理对象的原型时触发该操作，比如在执行 Object.getPrototypeOf(proxy) 时。
-      
-      getPrototypeOf(target)：拦截Object.getPrototypeOf(proxy)，返回一个对象。
-      拦截：
-      Object.prototype._proto_
-      Object.prototype.isPrototypeOf()
-      Object.getPrototypeOf()
-      Reflect.getPrototypeOf()
-      instanceof
-  //8、 isExtensible 在判断一个代理对象是否是可扩展时触发该操作，比如在执行 Object.isExtensible(proxy) 时。
-      
-      isExtensible(target)：拦截Object.isExtensible(proxy)，返回一个布尔值。
-  
-  //9、 ownKeys 在获取代理对象的所有属性键时触发该操作，比如在执行 Object.getOwnPropertyNames(proxy) 时。
-
-      ownKeys(target)：拦截Object.getOwnPropertyNames(proxy)、Object.getOwnPropertySymbols(proxy)、Object.keys(proxy)、for...in循环，返回一个数组。该方法返回目标对象所有自身的属性的属性名，而Object.keys()的返回结果仅包括目标对象自身的可遍历属性。
-  
-  //10、preventExtensions 在让一个代理对象不可扩展时触发该操作，比如在执行 Object.preventExtensions(proxy) 
-  
-      preventExtensions(target)：拦截Object.preventExtensions(proxy)，返回一个布尔值。
-
-  //11、setPrototypeOf 在设置代理对象的原型时触发该操作，比如在执行 Object.setPrototypeOf(proxy, null) 时。
-
-      setPrototypeOf(target, proto)：拦截Object.setPrototypeOf(proxy, proto)，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。
-
-  //12、defineProperty 在定义代理对象某个属性时的属性描述时触发该操作，比如在执行 Object.defineProperty(proxy, "foo", {}) 时。
-
-      defineProperty(target, propKey, propDesc)：拦截Object.defineProperty(proxy, propKey, propDesc）、Object.defineProperties(proxy, propDescs)，返回一个布尔值。
-
-  //13、deleteProperty 在删除代理对象的某个属性时触发该操作，比如在执行 delete proxy.foo 时。
-       
-      deleteProperty(target, propKey)：拦截delete proxy[propKey]的操作，返回一个布尔值。
-
-  Proxy.revocable()方法
-    返回一个可取消Proxy实例
-
-      let target = {};
-      let handler = {};
-      let {proxy, revoke} = Proxy.revocable(target, handler);
-
-      proxy.foo = 123;      
-      proxy.foo //123;
-
-      revoke();
-      proxy.foo // TypeError: Revoked
-      //执行完revoke, 代理proxy将不可访问了。
-
-  Proxy
-    Proxy里的this和target里的this是不一样的，而有些原生对象的内部属性，只有通过正确的this才能拿到如target.getDate.bind(target);
-
-
-  Reflect的静态方法：
-    13个静态方法：
-    Reflect.get(target, name, receiver)
-      获取target的name属性，target对象的this指向receiver，如果没有receiver则this为target
-      receiver为数据对象，target为方法对象
-    
-    Reflect.definePropert(target, propertyKey, attributes)
-      基本等同于Object.defineProperty，未来可能为去除Object.defineProperty
-
-    Reflect.set(target, name, value, receiver)
-      有receiver则target对象的this指向receiver，如果没有receiver则this为target
-
-    
-
-
-  
-
-
-
-    
-
-
-
-
-
+# http
+## 一、http基本原理
+
+### 1.1 概念
+
+Web 内容都是存储在Web 服务器上的。Web 服务器所使用的是HTTP 协议，因此经常会被称为HTTP 服务器。这些HTTP 服务器存储了因特网中的数据，如果HTTP 客户端发出请求的话，它们会提供数据。客户端向服务器发送HTTP 请求，服务器会在HTTP 响应中回送所请求的数据，HTTP 客户端(比如浏览器)和HTTP服务器共同构成了万维网的基本组件。
+
+### 1.2MIME(多用途因特网邮件扩展)
+
+MIME 类型是一种文本标记，表示一种主要的对象类型和一个特定的子类型，中间由一条斜杠来分隔。
+
+Web 服务器会为所有HTTP 对象数据附加一个MIME 类型当Web浏览器从服务器中取回一个对象时，会去查看相关的MIME 类型，看看它是否知道应该如何处理这个对象。大多数浏览器都可以处理数百种常见的对象类型：显示图片文件、解析并格式化HTML 文件、通过计算机声卡播放音频文件，或者运行外部5 插件软件来处理特殊格式的数据。
+
+Content-type: image/jpeg   image/svg+xml
+Content-length: 12984
+* Content-type
+  * HTML 格式的文本文档由 text/html 类型来标记。
+  * 普通的 ASCII 文本文档由 text/plain 类型来标记。
+  * JPEG 格式的图片为 image/jpeg 类型。
+  * GIF 格式的图片为 image/gif 类型。
+  * Apple 的 QuickTime 电影为 video/quicktime 类型。
+  * 微软的 PowerPoint 演示文件为 application/vnd.ms-powerpoint 类型。
+
+### 1.3 网络地址的基本信息
+
+每个Web 服务器资源都有一个名字，这样客户端就可以说明它们感兴趣的资源是什么了。服务器资源名被称为统一资源标识符（Uniform Resource Identifier，URI）。URI 就像因特网上的邮政地址一样，在世界范围内唯一标识并定位信息资源。
+
+统一资源定位符（URL）是资源标识符最常见的形式。URL 描述了一台特定服务器上某资源的特定位置。它们可以明确说明如何从一个精确、固定的位置获取资源。
+
+* 大部分URL 都遵循一种标准格式，这种格式包含三个部分。
+  * URL 的第一部分被称为方案（scheme），说明了访问资源所使用的协议类型。这
+  部分通常就是HTTP 协议（http://）。
+  * 第二部分给出了服务器的因特网地址（比如，www.joes-hardware.com）。
+  * 其余部分指定了 Web 服务器上的某个资源（比如，/specials/saw-blade.gif）。
+  现在，几乎所有的URI 都是URL。
+* 大多数URL 方案的URL 语法都建立在这个由9 部分构成的通用格式上：
+```html
+<scheme>://<user>:<password>@<host>:<port>/<path>;<params>?<query>#<frag>
+```
+  * 方案：访问服务器以获取资源时要使用哪种协议
+  * 用户：某些方案访问资源时需要用户名
+  * 密码：用户名后面可能需要包含密码，用冒号分隔
+  * 主机：资源宿主服务器的主机名或点分IP地址
+  * 端口：资源宿主服务器正在监听的端口号，很多方案都有默认端口号（HTTP的默认端口号为80）
+  * 路径：服务器上资源的本地名，由一个斜杠将其与前面的URL组件分隔开来，路径组件的语法是与服务器和方案有关的
+  * 参数：某些方案会用这个组件来指定输入参数。参数为名/值对。URL中可以包含多个参数字段，它们相互之间以及与路径的其余部分之间用分号(;)分隔
+  * 查询：某些方案会用这个组件传递参数以激活应用程序（比如数据库、公告板、搜索引擎以及其他因特网网关）。查询组件的内容没有通用格式。用字符“?”将其与URL的其余部分分隔开来。
+  * 片段：一小片或一部分资源的名字。引用对象时，不会将frag字段传送给服务器，这个字段是在客户端内部使用的。通过字符“#”将其其与URL的其余部分分隔开来
+
+几乎没有哪个URL 中包含了所有这些组件(不同类型的URL包含了里面的几个不同的部分)
+URL 最重要的3 个部分是方案（scheme）、主机（host）和路径（path）
+
+* 方案
+  * file：方案file表示一台指定主机（通过本地磁盘，网络文件系统或其他一些文件共享系统）上可直接访问的文件。各字段都遵循用户格式。本地主机可以省略主机名。
+  ```html
+  基本格式：
+  file://<host>/<path>
+  示例：
+  file://OFFICE-FS/policies/c.doc
+  ```
+  * news：用户来访问一些特定的文章或新闻组。它有一个很独特的性质：news URL自身包含的信息不足以对资源进行定位。
+  ```html
+  其他格式： 
+    news:<newsgroup>
+    news:<news-article-id>
+  示例：
+    news:rec.arts.startrek
+  ```
+  * telnet：用户访问交互式业务。它表示的并不是对象自身，而是可通过telnet协议访问的交互式应用程序（资源）。
+  ```html
+  基本格式：
+  telnet://<user>:<pasworld>@<host>:<port>/
+  示例：
+  telnet://slurp:webhound@joes-hardware.com:23/
+  ```
+  * http：超文本传输协议方案，除了没有用户名和密码之外，与通用的URL格式相符。默认端口80
+  ```html
+  基本格式：
+  http://<host>:<port>/<path>?<query>#<frag>
+  示例：
+  http://www.joes-hardware.com:80/index.html
+  ```
+  * https:
+  方案https与方案http是一对。唯一的区别在于方案https使用了网景的SSL，SSL为HTTP连接提供了端到端的加密机制。其语法与HTTP的语法相同，默认端口为443
+  ```html
+  基本格式：
+  https://<host>:<port>/<path>?<query>#<frag>
+  示例：
+  https://www.joes-hardware.com:80/index.html
+  ```
+  * mailto：Mailto URL指向的是E-mail地址。由于En-mail的行为与其他方案都都有所不同（它并不指向任何可以直接访问的对象），所以mailto URL的格式与标准URL的格式也有所不同。
+  ```html
+  基本格式：
+  mailto:<RFC-822-addr-spec>
+  示例：
+  mailto:joe@joes-hardware.com
+  ```
+  * ftp：文件传输协议URL可以用来从FTP服务器上下载或身其上载文件，并获取FTP服务器上的目录结构内容的列表。在Web和URL出现之前FTP就已经存在了。Web应用程序将FTP作为一种数据访问方案使用。URL语法遵循下列通用格式。
+  ```html
+  基本格式：
+  ftp://<user>:<password>@<host>:<port>/<path>;<params>
+  示例：
+  ftp://anonymous:joe%40joes@prep.ai.mit.edu:21/pub/gnu/
+  ```
+  * rtsp,rtspu：RTSP URL是可以通过实时流传输协议（Real Time Streaming Protocol）解析的音/视频媒体资源的标识符。方案rtspu中的u表示UDP协议来获取资源的。
+  ```html
+  基本格式：
+  rtsp://<user>:<password>@<host>:<port>/<path>
+  示例：rtsp://www.joes-hardware.com:554/interview/cto_video
+  ```
+
+## 二、HTTP请求的事务逻辑
+
+### 2.1 概念
+一个HTTP 事务由一条（从客户端发往服务器的）请求命令和一个（从服务器发回客户端的）响应结果组成。这种通信是通过名为HTTP 报文（HTTP message）的格式化数据块进行的
+
+* HTTP 报文包括以下三个部分。
+  * 起始行
+```
+报文的第一行就是起始行，在请求报文中用来说明要做些什么，在响应报文中说明出现了什么情况。
+```
+  * 首部字段
+```
+起始行后面有零个或多个首部字段。每个首部字段都包含一个名字和一个值，为了便于解析，两者之间用冒号（:）来分隔。首部以一个空行结束。添加一个首部字段和添加新行一样简单。
+```
+  * 主体
+```
+空行之后就是可选的报文主体了，其中包含了所有类型的数据。请求主体中包括了要发送给Web 服务器的数据；响应主体中装载了要返回给客户端的数据。起始行和首部都是文本形式且都是结构化的，而主体则不同，主体中可以包含任意的二进制数据（比如图片、视频、音轨、软件程序）。当然，主体中也可以包含文本。
+```
+
+### 2.2 HTTP请求的事务逻辑之连接
+
+HTTP 是个应用层协议。HTTP 无需操心网络通信的具体细节；它把联网的细节都交给了通用、可靠的因特网传输协议TCP/IP。只要建立了TCP 连接，客户端和服务器之间的报文交换就不会丢失、不会被破坏，也不会在接收时出现错序了。
+
+* TCP 提供了：
+  * 无差错的数据传输；
+  * 按序传输（数据总是会按照发送的顺序到达）；
+  * 未分段的数据流（可以在任意时刻以任意尺寸将数据发送出去）
+
+用网络术语来说，HTTP 协议位于TCP 的上层。HTTP 使用TCP 来传输其报文数据。
+
+* HTTP——————应用层
+* TCP ——————传输层
+* IP  ——————网络层
+* 网络特有的链路接口——————数据链路层
+* 物理网络硬件——————物理层
+
+在HTTP 客户端向服务器发送报文之前，需要用网际协议（Internet Protocol，IP）地址和端口号在客户端和服务器之间建立一条TCP/IP 连接
+
+* 步骤如下：
+  * (a) 浏览器从URL 中解析出服务器的主机名；
+  * (b) 浏览器将服务器的主机名转换成服务器的IP 地址；
+  * (c) 浏览器将端口号（如果有的话）从URL 中解析出来；
+  * (d) 浏览器建立一条与Web 服务器的TCP 连接；
+  * (e) 浏览器向服务器发送一条HTTP 请求报文；
+  * (f) 服务器向浏览器回送一条HTTP 响应报文；
+  * (g) 关闭连接，浏览器显示文档。
+
+### 2.3 TCP/IP的三次握手/四次挥手
+
+>客户端和服务端通信前要进行连接，“3次握手”的作用就是双方都能明确自己和对方的收、发能力是正常的。
+
+* 第一次握手：客户端向服务端发送网络包, 当服务端接受到后就可以得知:客户端可以正常的发送信息,以及服务端可以正常的接受信息
+* 第二次握手：服务端向客户端发送网络包, 当客户端接受到后就可以得知:服务端可以正常接受信息和发送信息, 并且自己是可以正常的发送和接受信息
+* 第三次握手：客户端向服务端发送网络包, 当服务端接受到后就可以得知:客户端的发送和接受能力正常,自己的发送和接受能力也正常
+
+>当客户端与服务器端关闭一个链接通道时,同样需要双方的确认才行, 这个确认的过程需要四个步骤. 与建立连接只能是客户端向服务端发送不同, 关闭链接可以有任意一方发起
+* 第一次挥手：发起方发送 FIN报文，代表断开连接
+* 第二次挥手：接收方响应 ACK(确认字符) 报文，并在自己发送完未处理的报文后发送 FIN 报文
+* 第三次挥手：发起方接收 ACK 报文后等待接收方的 FIN 报文，收到后发送 ACK 报文，自己进入 TIME_WAIT 状态，等待 2MSL(MSL是最大的报文存活时间,一般是30s,60s或是120s,主要是怕接收方没有接受到ACK报文) 后关闭连接
+* 第四次挥手：接收方收到 ACK 报文，关闭连接
+
+
+### 2.4 常见的业务结构组件
+
+* 代理位于客户端和服务器之间，接收所有客户端的HTTP 请求，并将这些请求转发给服务器（可能会对请求进行修改之后转发）。最常见的有一些绿坝(青少年网页内容过滤系统)或是VPN
+* 代理位于客户端和服务器之间，接收所有客户端的HTTP 请求，并将这些请求转发给服务器（可能会对请求进行修改之后转发）。最常见的有一些绿坝(青少年网页内容过滤系统)或是VPN
+* 网关（gateway）是一种特殊的服务器，作为其他服务器的中间实体使用。通常用于将HTTP 流量转换成其他的协议。网关接受请求时就好像自己是资源的源端服务器一样。客户端可能并不知道自己正在与一个网关进行通信。
+  * 网关（gateway）是一种特殊的服务器，作为其他服务器的中间实体使用。通常用于将HTTP 流量转换成其他的协议。网关接受请求时就好像自己是资源的源端服务器一样。客户端可能并不知道自己正在与一个网关进行通信。
+* 隧道（tunnel）是建立起来之后，就会在两条连接之间对原始数据进行盲转发(只负责转发数据但是不管转发的是啥)的HTTP 应用程序。HTTP 隧道通常用来在一条或多条HTTP 连接上转发非HTTP 数据，转发时不会窥探数据。
 
 

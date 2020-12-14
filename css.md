@@ -227,11 +227,13 @@ transform:matrix(0.866,0.5,-0.5,0.866,0,0);
   flex：flex-grow flex-shrink flex-basis复合写法，默认值为0 1 auto;该属性有两个快捷值：auto (1 1 auto) 和 none (0 0 auto)。
   align-self：属性允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性。默认值为auto，表示继承父元素的align-items属性，如果没有父元素，则等同于stretch,可选值：auto | flex-start | flex-end | center | baseline | stretch;
 ```
+
 # 五、media
 ## 5.1 media概述
 >>@media 媒体查询选择性加载css，意思是自动探测屏幕宽度，然后加载相应的css文件。可以针对不同的屏幕尺寸设置不同的样式，当你重置浏览器大小的过程中，页面也会根据浏览器的宽度和高度重新渲染页面，这对调试来说是一个极大的便利。
-```
-  基本使用
+
+基本使用
+```html
   <!-- link元素中的CSS媒体查询 -->
   <link rel="stylesheet" media="(max-width: 800px)" href="example.css" />
 
@@ -257,6 +259,7 @@ transform:matrix(0.866,0.5,-0.5,0.866,0,0);
 ```
 ## 5.3 媒体特性
 >>媒体特性（Media features）描述了 user agent、输出设备，或是浏览环境的具体特征。媒体特性表达式是完全可选的，它负责测试这些特性或特征是否存在、值为多少。每条媒体特性表达式都必须用括号括起来
+
 |  名称   | 简介  | 备注  |
 |  ----  | ----  | ----  |
 |any-hover | 是否有任何可用的输入机制允许用户（将鼠标等）悬停在元素上？|	在 Media Queries Level 4 中被添加。|
@@ -292,6 +295,7 @@ transform:matrix(0.866,0.5,-0.5,0.866,0,0);
 
 ## 5.4 编写响应式页面
 ### 5.4.1 设置Meta标签
+
 ```html
 <meta name="viewport" content="" />视口的作用：在移动浏览器中，当页面宽度超出设备，浏览器内部虚拟的一个页面容器，将页面容器缩放到设备这么大，然后展示
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -305,6 +309,7 @@ user-scalable 是否允许手动缩放 （yes || no 或 1 | 0）
 ```
 ### 5.4.2 加载兼容文件js
 >>因为IE8既不支持html5也不支持css3 @media ，所以我们需要加载两个js文件，来保证我们的代码实现兼容效果
+
 ```html
 <!--[if lt IE 9]>
 　　<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -312,12 +317,14 @@ user-scalable 是否允许手动缩放 （yes || no 或 1 | 0）
 <![endif]-->
 ```
 >>设置IE渲染方式默认为最高(可选)
+
 ```html
 现在有很多人的IE浏览器都升级到IE9以上了，所以这个时候就有又很多诡异的事情发生了，例如现在是IE9的浏览器，但是浏览器的文档模式却是IE8 为了防止这种情况，我们需要下面这段代码来让IE的文档渲染模式永远都是最新的
 <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
 // 这段代码后面加了一个chrome=1，如果用户的电脑里安装了 chrome，就可以让电脑里面的IE不管是哪个版本的都可以使用Webkit引擎及V8引擎进行排版及运算，如果没有安装，就显示IE最新的渲染模式。
 ```
 ### 5.4.3 代码实例
+
 ```js
 方式一：
   @media screen and (min-width:300px) and (max-width:500px) {
@@ -404,15 +411,18 @@ module.exports = {
         }
     },
 }
+
+// 备注：可能会出现ui组件变小，原因 组件css一依据 data-dpr="1" 时写的尺寸<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">这时我们使用的flexible引入时 data-dpr不是一个写死了的，是一个动态的；就导致这个问题
+// 然后就各种查解决方案，网络上给的解决方案一个是改写第三方库的样式，还有一个就是让flexible不编译第三方库的文件（忽略ui组件库的样式文件）。
 ```
-备注：可能会出现ui组件变小，原因 组件css一依据 data-dpr="1" 时写的尺寸<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">这时我们使用的flexible引入时 data-dpr不是一个写死了的，是一个动态的；就导致这个问题
-然后就各种查解决方案，网络上给的解决方案一个是改写第三方库的样式，还有一个就是让flexible不编译第三方库的文件（忽略ui组件库的样式文件）。
 
 解决方案一：
 ```
   将第三方组件的css文件复制出来第三方库的css代码px统一扩大2倍，或者用全局替换将px替换为px/*no*/。我觉的这个方案不太好没有采用，具体操作可以参考以下两篇文章：https://segmentfault.com/a/1190000014575890 和 https://blog.csdn.net/weixin_42464312/article/details/82769805。
 ```
+
 解决方案二：
+
 ```
   使用postcss-px2rem-exclude，网上好多说用这个方法不起作用，经过一个下午的折腾才发现是使用方法不对，我的错误方法就不跟你们说了，直接来正确的。
   首先，需要卸载项目中的postcss-px2rem。
@@ -423,7 +433,8 @@ module.exports = {
   最后是配置exclude选项，需要注意的是这个配置在vue.config.js中式不起作用的，如图。
 ```
 
-  正确的配置位置是项目根目录下的postcss.config.js文件，如果你的项目没有生成这个独立文件，就需要在你的package.js里设置。
+正确的配置位置是项目根目录下的postcss.config.js文件，如果你的项目没有生成这个独立文件，就需要在你的package.js里设置。
+
 postcss.config.js
 ```js
   module.exports = {
@@ -436,6 +447,7 @@ postcss.config.js
     }
   };
 ```
+
 package.json
 ```json
   "postcss": {
@@ -500,8 +512,11 @@ length
 %	使用 "line-height" 属性的百分比值来排列此元素。允许使用负值。
 inherit	规定应该从父元素继承 vertical-align 属性的值。
 ```
+
 # 七、display:table
+
 ## 7.1 概述
+
 >支持IE8，目前，在大多数开发环境中，已经基本不用table元素来做网页布局了，取而代之的是div+css，那么为什么不用table系表格元素呢？
 
 1、用DIV+CSS编写出来的文件k数比用table写出来的要小，不信你在页面中放1000个table和1000个div比比看哪个文件大
@@ -590,10 +605,14 @@ table-caption	|（类似 \<caption>）此元素会作为一个表格标题显示
 * （1）display: table时padding会失效
 * （2）display: table-row时margin、padding同时失效
 * （3）display: table-cell时margin会失效
+
 # 八、grid
+
 ## 8.1 概述
 >支持浏览器不太好，除了ie和flex支持到10，其他浏览器和flex相比差很远，暂时不总结了可以看[阮一峰总结的一网址](http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html)
+
 # 九、float
+
 ## 9.1 概述
 >支持主流浏览器，下面是浮动经典案例文字环绕
 ```html
